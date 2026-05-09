@@ -9,6 +9,7 @@ Built on the [`npx skills`](https://github.com/vercel-labs/skills) standard — 
 | Category | Skills | Description |
 |----------|--------|-------------|
 | [`agenpedia`](./skills/agenpedia/) | `ingest`, `ingest-batch`, `query`, `lint` | Markdown wiki knowledge base workflows |
+| [`general`](./skills/general/) | `grill-me` | Cross-project planning and design review |
 
 ## Install
 
@@ -18,13 +19,22 @@ Built on the [`npx skills`](https://github.com/vercel-labs/skills) standard — 
 # Install all agenpedia skills (auto-detects your installed coding agents)
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia --all
 
+# Install all general skills
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general --all
+
 # Install to a specific agent
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a claude-code
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a claude-code
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a gemini-cli
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a gemini-cli
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a opencode
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a opencode
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a kilo
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a kilo
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a pi
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a pi
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a codex
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a codex
 ```
 
 ### Update
@@ -43,6 +53,14 @@ These skills power the [Agenpedia](https://github.com/0xjacq/Agenpedia) wiki tem
 | `ingest-batch` | Triage and batch-ingest multiple sources |
 | `query` | Query the wiki with a natural language question |
 | `lint` | Check wiki health and fix structural issues |
+
+## General Skills
+
+Reusable skills that are not tied to a specific product or schema.
+
+| Skill | Description |
+|-------|-------------|
+| `grill-me` | Stress-test a plan or design one decision at a time |
 
 ## License
 
