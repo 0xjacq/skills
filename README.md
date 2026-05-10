@@ -8,7 +8,7 @@ Built on the [`npx skills`](https://github.com/vercel-labs/skills) standard — 
 
 | Category | Skills | Description |
 |----------|--------|-------------|
-| [`agenpedia`](./skills/agenpedia/) | `ingest`, `ingest-batch`, `query`, `lint` | Markdown wiki knowledge base workflows |
+| [`agenpedia`](./skills/agenpedia/) | `ingest`, `ingest-youtube`, `ingest-batch`, `query`, `lint` | Markdown wiki knowledge base workflows |
 | [`general`](./skills/general/) | `grill-me`, `html-project-brief` | Cross-project planning, design review, and visual project briefing |
 
 ## Install
@@ -50,6 +50,7 @@ These skills power the [Agenpedia](https://github.com/0xjacq/Agenpedia) wiki tem
 | Skill | Description |
 |-------|-------------|
 | `ingest` | Ingest a source (file, URL, text, or topic) into the wiki |
+| `ingest-youtube` | Transcribe a YouTube video into `raw/`, then hand it to `ingest` |
 | `ingest-batch` | Triage and batch-ingest multiple sources |
 | `query` | Query the wiki with a natural language question |
 | `lint` | Check wiki health and fix structural issues |
