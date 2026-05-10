@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}}</title>
+  <style>
+    :root {
+      --bg: #fffff8;
+      --fg: #111111;
+      --muted: #5c5c57;
+      --line: #d8d3c9;
+      --accent: #8f3d2e;
+      --accent-soft: #efe4df;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --max: 72rem;
+      --main: 38rem;
+      --rail: 18rem;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--serif);
+      line-height: 1.55;
+    }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2rem 1.25rem 5rem;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+    }
+
+    .eyebrow, .meta, nav, .tabs, .pill {
+      font-family: var(--sans);
+    }
+
+    h1, h2, h3 {
+      font-weight: 500;
+      line-height: 1.1;
+      margin: 0 0 0.75rem;
+    }
+
+    h1 { font-size: 2.3rem; }
+    h2 { font-size: 1.45rem; margin-top: 2.5rem; }
+    h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+
+    .subtitle, .meta {
+      color: var(--muted);
+      max-width: 52rem;
+    }
+
+    .summary {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      padding: 0.45rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      background: #fffdfa;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, var(--main)) minmax(0, var(--rail));
+      gap: 2rem;
+      align-items: start;
+    }
+
+    main { min-width: 0; }
+    aside {
+      position: sticky;
+      top: 1rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    aside section {
+      border-left: 2px solid var(--line);
+      padding-left: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    nav a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+      padding: 0.15rem 0;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    p, ul, ol, pre, table, figure {
+      margin: 0 0 1rem;
+    }
+
+    ul, ol {
+      padding-left: 1.25rem;
+    }
+
+    .callout {
+      border: 1px solid var(--line);
+      background: #fffdfa;
+      padding: 0.85rem 1rem;
+      margin: 1rem 0;
+    }
+
+    .callout.warn {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .figure-wide {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      background: #fffdfa;
+    }
+
+    figcaption {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    pre, code {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+    }
+
+    pre {
+      overflow: auto;
+      padding: 0.85rem;
+      border: 1px solid var(--line);
+      background: #fcfbf7;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.96rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.45rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+
+    .tabs button {
+      border: 1px solid var(--line);
+      background: #fffdfa;
+      color: var(--fg);
+      padding: 0.45rem 0.7rem;
+      cursor: pointer;
+    }
+
+    .tabs button[aria-selected="true"] {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    [data-panel] { display: none; }
+    [data-panel].active { display: block; }
+
+    .copy-btn {
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      border: 1px solid var(--line);
+      background: #fffdfa;
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+      float: right;
+    }
+
+    .marginnote {
+      color: var(--muted);
+      font-size: 0.92rem;
+      border-left: 2px solid var(--line);
+      padding-left: 0.75rem;
+      margin: 0.75rem 0;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: static; order: -1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="eyebrow">{{MODE}} brief</div>
+      <h1>{{TITLE}}</h1>
+      <p class="subtitle">{{ONE_SENTENCE_PURPOSE}}</p>
+      <p class="meta">{{SOURCE_SCOPE}} | {{DATE_OR_COMMIT_RANGE}}</p>
+      <div class="summary">
+        <span class="pill">{{SUMMARY_1}}</span>
+        <span class="pill">{{SUMMARY_2}}</span>
+        <span class="pill">{{SUMMARY_3}}</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <main>
+        <section id="overview">
+          <h2>Overview</h2>
+          <p>{{OVERVIEW_TEXT}}</p>
+          <div class="callout">{{KEY_TAKEAWAY}}</div>
+        </section>
+
+        <section id="map">
+          <h2>System Map</h2>
+          <figure class="figure-wide">
+            <svg viewBox="0 0 800 240" width="100%" role="img" aria-label="System map">
+              <rect x="20" y="70" width="180" height="70" fill="#fffdfa" stroke="#b9b1a4"/>
+              <rect x="310" y="70" width="180" height="70" fill="#fffdfa" stroke="#b9b1a4"/>
+              <rect x="600" y="70" width="180" height="70" fill="#fffdfa" stroke="#b9b1a4"/>
+              <text x="110" y="110" text-anchor="middle" font-family="sans-serif" font-size="16">Input / Source</text>
+              <text x="400" y="110" text-anchor="middle" font-family="sans-serif" font-size="16">Core Logic</text>
+              <text x="690" y="110" text-anchor="middle" font-family="sans-serif" font-size="16">Output / Surface</text>
+              <line x1="200" y1="105" x2="310" y2="105" stroke="#8f3d2e" stroke-width="2"/>
+              <line x1="490" y1="105" x2="600" y2="105" stroke="#8f3d2e" stroke-width="2"/>
+            </svg>
+            <figcaption>{{MAP_CAPTION}}</figcaption>
+          </figure>
+        </section>
+
+        <section id="details">
+          <h2>Key Areas</h2>
+          <div class="tabs" role="tablist" aria-label="Views">
+            <button type="button" aria-selected="true" data-tab="files">Files</button>
+            <button type="button" aria-selected="false" data-tab="flow">Flow</button>
+            <button type="button" aria-selected="false" data-tab="changes">Changes</button>
+          </div>
+
+          <div data-panel="files" class="active">
+            <p>{{FILES_SUMMARY}}</p>
+          </div>
+          <div data-panel="flow">
+            <p>{{FLOW_SUMMARY}}</p>
+          </div>
+          <div data-panel="changes">
+            <p>{{CHANGE_SUMMARY}}</p>
+          </div>
+        </section>
+
+        <section id="snippet">
+          <h2>Annotated Snippet</h2>
+          <button class="copy-btn" data-copy-target="snippet-code">Copy</button>
+          <pre id="snippet-code"><code>{{CODE_SNIPPET}}</code></pre>
+          <div class="marginnote">{{SNIPPET_NOTE}}</div>
+        </section>
+
+        <section id="next">
+          <h2>Read Next</h2>
+          <ul>
+            <li>{{NEXT_1}}</li>
+            <li>{{NEXT_2}}</li>
+            <li>{{NEXT_3}}</li>
+          </ul>
+        </section>
+      </main>
+
+      <aside>
+        <section>
+          <strong>Contents</strong>
+          <nav>
+            <a href="#overview">Overview</a>
+            <a href="#map">System Map</a>
+            <a href="#details">Key Areas</a>
+            <a href="#snippet">Annotated Snippet</a>
+            <a href="#next">Read Next</a>
+          </nav>
+        </section>
+
+        <section>
+          <strong>Notes</strong>
+          <p>{{SIDE_NOTE_1}}</p>
+          <p>{{SIDE_NOTE_2}}</p>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll("[data-tab]");
+    const panels = document.querySelectorAll("[data-panel]");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.tab;
+        tabs.forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
+        panels.forEach((p) => p.classList.toggle("active", p.dataset.panel === target));
+      });
+    });
+
+    document.querySelectorAll("[data-copy-target]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const el = document.getElementById(btn.dataset.copyTarget);
+        if (!el) return;
+        await navigator.clipboard.writeText(el.innerText);
+        btn.textContent = "Copied";
+        setTimeout(() => { btn.textContent = "Copy"; }, 1200);
+      });
+    });
+  </script>
+</body>
+</html>
