@@ -35,7 +35,7 @@ is missing.
 2. Run:
 
    ```bash
-   python3 skills/agenpedia/ingest-youtube/scripts/fetch_youtube_transcript.py "<youtube-url>"
+   python3 scripts/fetch_youtube_transcript.py "<youtube-url>"
    ```
 
 3. The script writes a markdown source file under `raw/` and prints the
@@ -56,7 +56,7 @@ is missing.
 
 ## Script
 
-`skills/agenpedia/ingest-youtube/scripts/fetch_youtube_transcript.py`
+`scripts/fetch_youtube_transcript.py`
 does the deterministic work:
 
 - runs `yt2txt.sh` non-interactively
