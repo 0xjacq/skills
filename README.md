@@ -9,7 +9,7 @@ Built on the [`npx skills`](https://github.com/vercel-labs/skills) standard — 
 | Category | Skills | Description |
 |----------|--------|-------------|
 | [`agenpedia`](./skills/agenpedia/) | `ingest`, `ingest-youtube`, `ingest-batch`, `query`, `lint` | Markdown wiki knowledge base workflows |
-| [`general`](./skills/general/) | `grill-me`, `html-project-brief` | Cross-project planning, design review, and visual project briefing |
+| [`general`](./skills/general/) | `grill-me`, `grill-me-light`, `html-project-brief` | Cross-project planning, design review, and visual project briefing |
 
 ## Install
 
@@ -62,6 +62,7 @@ Reusable skills that are not tied to a specific product or schema.
 | Skill | Description |
 |-------|-------------|
 | `grill-me` | Stress-test a plan or design one decision at a time |
+| `grill-me-light` | Run a short, high-leverage stress-test of a plan or design |
 | `html-project-brief` | Turn repos, docs, and diffs into self-contained HTML project briefings |
 
 ## License
