@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tufte Renderer Showcase</title>
+  <style>
+    :root {
+      --bg: #f8f3ea;
+      --fg: #17120e;
+      --muted: #62564a;
+      --line: #d2c3b1;
+      --accent: #7b4a2d;
+      --accent-soft: #e6d7c5;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --max: 72rem;
+      --main: 38rem;
+      --rail: 18rem;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--serif);
+      line-height: 1.55;
+    }
+
+    article.page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2rem 1.25rem 5rem;
+      counter-reset: sidenote-counter;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+    }
+
+    .meta, nav, .copy-btn, .sans {
+      font-family: var(--sans);
+    }
+
+    h1, h2, h3 {
+      font-weight: 500;
+      line-height: 1.1;
+      margin: 0 0 0.75rem;
+    }
+
+    h1 { font-size: 2.3rem; }
+    h2 { font-size: 1.45rem; margin-top: 2.5rem; }
+    h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+
+    h4 {
+      font-weight: 500;
+      line-height: 1.1;
+      margin: 1.2rem 0 0.65rem;
+      font-size: 1rem;
+    }
+
+    .subtitle, .meta {
+      color: var(--muted);
+      max-width: 52rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, var(--main)) minmax(0, var(--rail));
+      gap: 2rem;
+      align-items: start;
+    }
+
+    main { min-width: 0; }
+
+    aside {
+      position: sticky;
+      top: 1rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    aside section {
+      border-left: 2px solid var(--line);
+      padding-left: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    nav a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+      padding: 0.15rem 0;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    main a {
+      color: var(--accent);
+      text-decoration-color: rgba(123, 74, 45, 0.45);
+      text-underline-offset: 0.12em;
+      text-decoration-thickness: 1px;
+    }
+
+    main a:hover {
+      text-decoration-color: var(--accent);
+    }
+
+    p, ul, ol, pre, table, figure, blockquote {
+      margin: 0 0 1rem;
+    }
+
+    ul, ol {
+      padding-left: 1.25rem;
+    }
+
+    section > :first-child {
+      margin-top: 0;
+    }
+
+    figure img,
+    figure svg,
+    figure video {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    blockquote {
+      border-left: 2px solid var(--line);
+      color: #3b3028;
+      margin-left: 0;
+      padding-left: 1rem;
+    }
+
+    blockquote footer {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 0.75rem;
+    }
+
+    .epigraph {
+      margin: 1.5rem 0 1.75rem;
+    }
+
+    .epigraph blockquote {
+      border-left: none;
+      font-style: italic;
+      margin-left: 0;
+      padding-left: 0;
+    }
+
+    .epigraph blockquote footer {
+      font-style: normal;
+      text-align: right;
+    }
+
+    .newthought {
+      font-variant: small-caps;
+      letter-spacing: 0.04em;
+      font-size: 1.05em;
+    }
+
+    .sans {
+      letter-spacing: 0.01em;
+    }
+
+    .callout {
+      border: 1px solid var(--line);
+      background: #f2e8db;
+      padding: 0.85rem 1rem;
+      margin: 1rem 0;
+    }
+
+    .callout.warn {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .fullwidth {
+      margin: 1.5rem 0;
+      width: min(calc(100vw - 2.5rem), calc(var(--main) + var(--rail) + 2rem));
+      max-width: none;
+    }
+
+    .figure-wide {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      background: #f2e8db;
+    }
+
+    .iframe-wrapper {
+      position: relative;
+      margin: 1.5rem 0;
+      width: min(calc(100vw - 2.5rem), calc(var(--main) + var(--rail) + 2rem));
+      max-width: none;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #f2e8db;
+    }
+
+    .iframe-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    .table-wrap table {
+      margin-bottom: 0;
+    }
+
+    figcaption {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    pre, code {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+    }
+
+    code:not(pre code) {
+      background: #eee3d4;
+      border: 1px solid #dccab5;
+      border-radius: 0.2rem;
+      padding: 0.08rem 0.28rem;
+    }
+
+    pre {
+      overflow: auto;
+      padding: 0.85rem;
+      border: 1px solid var(--line);
+      background: #f3ece2;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.96rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.45rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      background: #efe1cf;
+    }
+
+    .copy-btn {
+      font-size: 0.85rem;
+      border: 1px solid var(--line);
+      background: #ead9c4;
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+      float: right;
+    }
+
+    .margin-toggle {
+      cursor: pointer;
+      color: var(--accent);
+      user-select: none;
+    }
+
+    .sidenote-number::after {
+      counter-increment: sidenote-counter;
+      content: counter(sidenote-counter);
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      vertical-align: super;
+      line-height: 0;
+      margin-left: 0.12rem;
+    }
+
+    input.margin-toggle {
+      display: none;
+    }
+
+    .sidenote,
+    .marginnote {
+      float: right;
+      clear: right;
+      width: 52%;
+      margin-right: -56%;
+      margin-bottom: 1rem;
+      padding-left: 0.75rem;
+      border-left: 2px solid var(--line);
+      background: #f2e8db;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.35;
+    }
+
+    .sidenote::before {
+      content: counter(sidenote-counter) ". ";
+      font-family: var(--sans);
+      color: var(--accent);
+      font-size: 0.85rem;
+    }
+
+    .sidenote img,
+    .marginnote img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: static; order: -1; }
+      .fullwidth,
+      .iframe-wrapper { width: 100%; }
+      .sidenote,
+      .marginnote {
+        display: none;
+        float: none;
+        clear: both;
+        width: auto;
+        margin: 0.75rem 0;
+        padding: 0.75rem 0.9rem;
+      }
+      input.margin-toggle:checked + .sidenote,
+      input.margin-toggle:checked + .marginnote {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <article class="page">
+    <header>
+      <h1>Tufte Renderer Showcase</h1>
+      <p class="subtitle">Hybrid reference fixture</p>
+      <p class="meta">Codex | 2026-05-14</p>
+    </header>
+
+    <div class="layout">
+      <main>
+        <section>
+          <p><span class="newthought">This fixture</span> starts with a standard markdown footnote.<label for="sn-showcase" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-showcase" class="margin-toggle"/><span class="sidenote">Standard markdown footnotes should map to Tufte-style sidenotes.</span> It also includes an explicit margin note <label for="mn-fixture" class="margin-toggle">⊕</label><input type="checkbox" id="mn-fixture" class="margin-toggle"/><span class="marginnote">Explicit margin notes stay source-driven and are never invented.</span> and a <span class="sans">sans-serif aside</span>.</p>
+        </section>
+
+        <section id="epigraph">
+          <h2>Epigraph</h2>
+          <div class="epigraph">
+            <blockquote>
+              <p>Well-designed evidence is quiet.</p>
+              <footer>Reference fixture</footer>
+            </blockquote>
+          </div>
+        </section>
+
+        <section id="media">
+          <h2>Media</h2>
+          <figure class="fullwidth">
+            <svg viewBox="0 0 1200 240" width="100%" role="img" aria-label="Full-width fixture figure">
+              <rect x="0" y="0" width="1200" height="240" fill="#e6d7c5"></rect>
+              <rect x="80" y="52" width="220" height="136" fill="#f8f3ea" stroke="#7b4a2d" stroke-width="4"></rect>
+              <rect x="370" y="52" width="460" height="136" fill="#f8f3ea" stroke="#7b4a2d" stroke-width="4"></rect>
+              <rect x="900" y="52" width="220" height="136" fill="#f8f3ea" stroke="#7b4a2d" stroke-width="4"></rect>
+              <text x="190" y="130" font-family="Georgia, serif" font-size="28" fill="#17120e" text-anchor="middle">Main Column</text>
+              <text x="600" y="130" font-family="Georgia, serif" font-size="28" fill="#17120e" text-anchor="middle">Full-width Figure</text>
+              <text x="1010" y="130" font-family="Georgia, serif" font-size="28" fill="#17120e" text-anchor="middle">Margin Space</text>
+            </svg>
+            <figcaption>Full-width figures extend beyond the reading column.</figcaption>
+          </figure>
+
+          <figure class="iframe-wrapper">
+            <iframe title="Embedded media placeholder" srcdoc="<!doctype html><html><body style='margin:0;display:grid;place-items:center;height:100vh;background:#f3ece2;color:#17120e;font-family:Georgia,serif;'>Embedded media placeholder</body></html>"></iframe>
+          </figure>
+        </section>
+
+        <section id="code">
+          <h2>Code</h2>
+          <button class="copy-btn" data-copy-target="fixture-code" type="button">Copy</button>
+          <pre id="fixture-code"><code>&lt;figure class="iframe-wrapper"&gt;
+  &lt;iframe title="Embedded media placeholder"&gt;&lt;/iframe&gt;
+&lt;/figure&gt;</code></pre>
+        </section>
+      </main>
+
+      <aside aria-label="Document navigation and notes">
+        <section>
+          <strong>Contents</strong>
+          <nav>
+            <a href="#epigraph">Epigraph</a>
+            <a href="#media">Media</a>
+            <a href="#code">Code</a>
+          </nav>
+        </section>
+      </aside>
+    </div>
+  </article>
+
+  <script>
+    document.querySelectorAll("[data-copy-target]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const el = document.getElementById(btn.dataset.copyTarget);
+        if (!el) return;
+        await navigator.clipboard.writeText(el.innerText);
+        btn.textContent = "Copied";
+        setTimeout(() => { btn.textContent = "Copy"; }, 1200);
+      });
+    });
+  </script>
+</body>
+</html>

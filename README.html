@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>0xjacq/skills</title>
+  <style>
+    :root {
+      --bg: #f8f3ea;
+      --fg: #17120e;
+      --muted: #62564a;
+      --line: #d2c3b1;
+      --accent: #7b4a2d;
+      --accent-soft: #e6d7c5;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --max: 72rem;
+      --main: 38rem;
+      --rail: 18rem;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--serif);
+      line-height: 1.55;
+    }
+
+    article.page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2rem 1.25rem 5rem;
+      counter-reset: sidenote-counter;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+    }
+
+    .meta, nav, .copy-btn, .sans {
+      font-family: var(--sans);
+    }
+
+    h1, h2, h3 {
+      font-weight: 500;
+      line-height: 1.1;
+      margin: 0 0 0.75rem;
+    }
+
+    h1 { font-size: 2.3rem; }
+    h2 { font-size: 1.45rem; margin-top: 2.5rem; }
+    h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+
+    h4 {
+      font-weight: 500;
+      line-height: 1.1;
+      margin: 1.2rem 0 0.65rem;
+      font-size: 1rem;
+    }
+
+    .subtitle, .meta {
+      color: var(--muted);
+      max-width: 52rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, var(--main)) minmax(0, var(--rail));
+      gap: 2rem;
+      align-items: start;
+    }
+
+    main { min-width: 0; }
+
+    aside {
+      position: sticky;
+      top: 1rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    aside section {
+      border-left: 2px solid var(--line);
+      padding-left: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    nav a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+      padding: 0.15rem 0;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    main a {
+      color: var(--accent);
+      text-decoration-color: rgba(123, 74, 45, 0.45);
+      text-underline-offset: 0.12em;
+      text-decoration-thickness: 1px;
+    }
+
+    main a:hover {
+      text-decoration-color: var(--accent);
+    }
+
+    p, ul, ol, pre, table, figure, blockquote {
+      margin: 0 0 1rem;
+    }
+
+    ul, ol {
+      padding-left: 1.25rem;
+    }
+
+    section > :first-child {
+      margin-top: 0;
+    }
+
+    figure img,
+    figure svg,
+    figure video {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    blockquote {
+      border-left: 2px solid var(--line);
+      color: #3b3028;
+      margin-left: 0;
+      padding-left: 1rem;
+    }
+
+    blockquote footer {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 0.75rem;
+    }
+
+    .epigraph {
+      margin: 1.5rem 0 1.75rem;
+    }
+
+    .epigraph blockquote {
+      border-left: none;
+      font-style: italic;
+      margin-left: 0;
+      padding-left: 0;
+    }
+
+    .epigraph blockquote footer {
+      font-style: normal;
+      text-align: right;
+    }
+
+    .newthought {
+      font-variant: small-caps;
+      letter-spacing: 0.04em;
+      font-size: 1.05em;
+    }
+
+    .sans {
+      letter-spacing: 0.01em;
+    }
+
+    .callout {
+      border: 1px solid var(--line);
+      background: #f2e8db;
+      padding: 0.85rem 1rem;
+      margin: 1rem 0;
+    }
+
+    .callout.warn {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .fullwidth {
+      margin: 1.5rem 0;
+      width: min(calc(100vw - 2.5rem), calc(var(--main) + var(--rail) + 2rem));
+      max-width: none;
+    }
+
+    .figure-wide {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      background: #f2e8db;
+    }
+
+    .iframe-wrapper {
+      position: relative;
+      margin: 1.5rem 0;
+      width: min(calc(100vw - 2.5rem), calc(var(--main) + var(--rail) + 2rem));
+      max-width: none;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #f2e8db;
+    }
+
+    .iframe-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    .table-wrap table {
+      margin-bottom: 0;
+    }
+
+    figcaption {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    pre, code {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+    }
+
+    code:not(pre code) {
+      background: #eee3d4;
+      border: 1px solid #dccab5;
+      border-radius: 0.2rem;
+      padding: 0.08rem 0.28rem;
+    }
+
+    pre {
+      overflow: auto;
+      padding: 0.85rem;
+      border: 1px solid var(--line);
+      background: #f3ece2;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.96rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.45rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      background: #efe1cf;
+    }
+
+    .copy-btn {
+      font-size: 0.85rem;
+      border: 1px solid var(--line);
+      background: #ead9c4;
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+      float: right;
+    }
+
+    .margin-toggle {
+      cursor: pointer;
+      color: var(--accent);
+      user-select: none;
+    }
+
+    .sidenote-number::after {
+      counter-increment: sidenote-counter;
+      content: counter(sidenote-counter);
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      vertical-align: super;
+      line-height: 0;
+      margin-left: 0.12rem;
+    }
+
+    input.margin-toggle {
+      display: none;
+    }
+
+    .sidenote,
+    .marginnote {
+      float: right;
+      clear: right;
+      width: 52%;
+      margin-right: -56%;
+      margin-bottom: 1rem;
+      padding-left: 0.75rem;
+      border-left: 2px solid var(--line);
+      background: #f2e8db;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.35;
+    }
+
+    .sidenote::before {
+      content: counter(sidenote-counter) ". ";
+      font-family: var(--sans);
+      color: var(--accent);
+      font-size: 0.85rem;
+    }
+
+    .sidenote img,
+    .marginnote img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: static; order: -1; }
+      .fullwidth,
+      .iframe-wrapper { width: 100%; }
+      .sidenote,
+      .marginnote {
+        display: none;
+        float: none;
+        clear: both;
+        width: auto;
+        margin: 0.75rem 0;
+        padding: 0.75rem 0.9rem;
+      }
+      input.margin-toggle:checked + .sidenote,
+      input.margin-toggle:checked + .marginnote {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <article class="page">
+    <header>
+      <h1>0xjacq/skills</h1>
+    </header>
+
+    <div class="layout">
+      <main>
+        <section>
+          <p>Open collection of agent skills by <a href="https://github.com/0xjacq">0xjacq</a>.</p>
+          <p>Built on the <a href="https://github.com/vercel-labs/skills"><code>npx skills</code></a> standard &mdash; compatible with Claude Code, Gemini CLI, OpenCode, Kilo Code, Pi, Codex, and 50+ other coding agents.</p>
+        </section>
+
+        <section id="categories">
+          <h2>Categories</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Skills</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="./skills/agenpedia/"><code>agenpedia</code></a></td>
+                  <td><code>ingest</code>, <code>ingest-youtube</code>, <code>ingest-batch</code>, <code>query</code>, <code>lint</code></td>
+                  <td>Markdown wiki knowledge base workflows</td>
+                </tr>
+                <tr>
+                  <td><a href="./skills/general/"><code>general</code></a></td>
+                  <td><code>grill-me</code>, <code>grill-me-light</code>, <code>html-project-brief</code></td>
+                  <td>Cross-project planning, design review, and visual project briefing</td>
+                </tr>
+                <tr>
+                  <td><a href="./skills/tools/"><code>tools</code></a></td>
+                  <td><code>build-or-not</code>, <code>find-tools</code></td>
+                  <td>Tooling and pre-build diligence orchestration skills</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="install">
+          <h2>Install</h2>
+
+          <section id="install-a-category">
+            <h3>Install a category</h3>
+            <button class="copy-btn" data-copy-target="install-category-code" type="button">Copy</button>
+            <pre id="install-category-code"><code># Install all agenpedia skills (auto-detects your installed coding agents)
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia --all
+
+# Install all general skills
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general --all
+
+# Install all tools skills
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools --all
+
+# Install to a specific agent
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a claude-code
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a claude-code
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a claude-code
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a gemini-cli
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a gemini-cli
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a gemini-cli
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a opencode
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a opencode
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a opencode
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a kilo
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a kilo
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a kilo
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a pi
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a pi
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a pi
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a codex
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a codex
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a codex</code></pre>
+          </section>
+
+          <section id="update">
+            <h3>Update</h3>
+            <pre><code>npx skills update</code></pre>
+          </section>
+        </section>
+
+        <section id="agenpedia-skills">
+          <h2>Agenpedia Skills</h2>
+          <p>These skills power the <a href="https://github.com/0xjacq/Agenpedia">Agenpedia</a> wiki template. They can also be used standalone in any markdown wiki project that follows the Agenpedia schema.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Skill</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>ingest</code></td>
+                  <td>Ingest a source (file, URL, text, or topic) into the wiki</td>
+                </tr>
+                <tr>
+                  <td><code>ingest-youtube</code></td>
+                  <td>Transcribe a YouTube video into <code>raw/</code>, then hand it to <code>ingest</code></td>
+                </tr>
+                <tr>
+                  <td><code>ingest-batch</code></td>
+                  <td>Triage and batch-ingest multiple sources</td>
+                </tr>
+                <tr>
+                  <td><code>query</code></td>
+                  <td>Query the wiki with a natural language question</td>
+                </tr>
+                <tr>
+                  <td><code>lint</code></td>
+                  <td>Check wiki health and fix structural issues</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="general-skills">
+          <h2>General Skills</h2>
+          <p>Reusable skills that are not tied to a specific product or schema.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Skill</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>grill-me</code></td>
+                  <td>Stress-test a plan or design one decision at a time</td>
+                </tr>
+                <tr>
+                  <td><code>grill-me-light</code></td>
+                  <td>Run a short, high-leverage stress-test of a plan or design</td>
+                </tr>
+                <tr>
+                  <td><code>html-project-brief</code></td>
+                  <td>Turn repos, docs, and diffs into self-contained HTML project briefings</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="tools-skills">
+          <h2>Tools Skills</h2>
+          <p>Runtime-backed skills that orchestrate external engines and return structured artifacts.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Skill</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>build-or-not</code></td>
+                  <td>Run a conservative prior-art and reuse check before recommending a greenfield build</td>
+                </tr>
+                <tr>
+                  <td><code>find-tools</code></td>
+                  <td>Find the current best-fit tool, package, framework, repo, or product for a capability</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="license">
+          <h2>License</h2>
+          <p>MIT</p>
+        </section>
+      </main>
+
+      <aside aria-label="Document navigation and notes">
+        <section>
+          <strong>Contents</strong>
+          <nav>
+            <a href="#categories">Categories</a>
+            <a href="#install">Install</a>
+            <a href="#install-a-category">Install a category</a>
+            <a href="#update">Update</a>
+            <a href="#agenpedia-skills">Agenpedia Skills</a>
+            <a href="#general-skills">General Skills</a>
+            <a href="#tools-skills">Tools Skills</a>
+            <a href="#license">License</a>
+          </nav>
+        </section>
+      </aside>
+    </div>
+  </article>
+
+  <script>
+    document.querySelectorAll("[data-copy-target]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const el = document.getElementById(btn.dataset.copyTarget);
+        if (!el) return;
+        await navigator.clipboard.writeText(el.innerText);
+        btn.textContent = "Copied";
+        setTimeout(() => { btn.textContent = "Copy"; }, 1200);
+      });
+    });
+  </script>
+</body>
+</html>
