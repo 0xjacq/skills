@@ -11,7 +11,7 @@ Each skill keeps reusable workflow instructions in `SKILL.md`, pushes heavy refe
 | Category | Skills | Description |
 |----------|--------|-------------|
 | [`agenpedia`](./skills/agenpedia/) | `ingest`, `ingest-youtube`, `ingest-batch`, `query`, `lint` | Markdown wiki knowledge base workflows |
-| [`general`](./skills/general/) | `grill-me`, `grill-me-light`, `html-project-brief` | Cross-project planning, design review, and visual project briefing |
+| [`general`](./skills/general/) | `grill-me`, `grill-me-light`, `html-project-brief`, `html-project-brief-visual` | Cross-project planning, design review, and HTML project briefing |
 | [`tools`](./skills/tools/) | `build-or-not`, `find-tools` | Tooling and pre-build diligence orchestration skills |
 
 ## Install
@@ -59,6 +59,7 @@ Reusable skills that are not tied to a specific product or schema.
 | `grill-me` | Stress-test a plan or design one decision at a time |
 | `grill-me-light` | Run a short, high-leverage stress-test of a plan or design |
 | `html-project-brief` | Turn repos, docs, and diffs into self-contained HTML project briefings |
+| `html-project-brief-visual` | Turn repos, docs, and diffs into visual-first self-contained HTML project briefings |
 
 ## Tools Skills
 

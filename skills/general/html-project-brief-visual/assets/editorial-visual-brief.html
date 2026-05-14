@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}}</title>
+  <style>
+    :root {
+      --bg: #f7f2ea;
+      --paper: rgba(255, 251, 246, 0.88);
+      --panel: #fffaf4;
+      --fg: #171412;
+      --muted: #665f59;
+      --line: rgba(89, 71, 53, 0.18);
+      --accent: #9f4f2d;
+      --accent-soft: rgba(159, 79, 45, 0.12);
+      --sans: "Avenir Next", "Segoe UI", sans-serif;
+      --serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+      --max: 84rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--serif);
+      color: var(--fg);
+      background:
+        radial-gradient(circle at top left, rgba(159, 79, 45, 0.10), transparent 28rem),
+        linear-gradient(180deg, #fcf7f0 0%, var(--bg) 32%, #f3ede4 100%);
+      line-height: 1.55;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 1.25rem 1.25rem 4rem;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-family: var(--sans);
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+      gap: 1rem;
+      align-items: stretch;
+      margin-bottom: 2rem;
+    }
+
+    .hero-image-card,
+    .hero-copy,
+    .panel,
+    .figure-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-image-card {
+      padding: 0.9rem;
+    }
+
+    .hero-image {
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+
+    .hero-copy {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .eyebrow,
+    .meta,
+    .summary,
+    .rail,
+    .tabs,
+    .caption-meta,
+    .copy-btn {
+      font-family: var(--sans);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.78rem;
+      margin-bottom: 0.8rem;
+    }
+
+    h1, h2, h3 {
+      font-weight: 500;
+      line-height: 1.08;
+      margin: 0 0 0.8rem;
+    }
+
+    h1 { font-size: clamp(2.2rem, 5vw, 4rem); }
+    h2 { font-size: 1.55rem; margin-top: 0; }
+    h3 { font-size: 1.05rem; }
+
+    .subtitle,
+    .meta,
+    .caption,
+    .caption-meta,
+    .rail,
+    .marginnote {
+      color: var(--muted);
+    }
+
+    .summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .summary span {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.7);
+      padding: 0.4rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+    }
+
+    .main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(15rem, 20rem);
+      gap: 1rem;
+    }
+
+    .stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .panel,
+    .figure-card {
+      padding: 1.15rem;
+    }
+
+    .figure-card img {
+      width: 100%;
+      border: 1px solid var(--line);
+      margin-bottom: 0.85rem;
+    }
+
+    .caption-meta {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 0.35rem;
+    }
+
+    .annotated {
+      position: relative;
+      border: 1px solid var(--line);
+      background: #fcf8f2;
+      min-height: 18rem;
+      overflow: hidden;
+    }
+
+    .annotated img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.92;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .overlay .label {
+      position: absolute;
+      max-width: 13rem;
+      padding: 0.55rem 0.65rem;
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      background: rgba(255, 250, 244, 0.92);
+      border: 1px solid var(--line);
+      box-shadow: 0 0.4rem 1.4rem rgba(35, 25, 18, 0.08);
+    }
+
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-soft);
+      padding: 0.85rem 0.95rem;
+      margin: 1rem 0;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .tabs button,
+    .copy-btn {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--fg);
+      cursor: pointer;
+      padding: 0.45rem 0.65rem;
+    }
+
+    .tabs button[aria-selected="true"] {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    [data-panel] { display: none; }
+    [data-panel].active { display: block; }
+
+    pre, code {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+    }
+
+    pre {
+      overflow: auto;
+      margin: 0;
+      padding: 0.9rem;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.4rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    .rail {
+      position: sticky;
+      top: 1rem;
+      align-self: start;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .rail section {
+      background: rgba(255, 251, 246, 0.7);
+      border: 1px solid var(--line);
+      padding: 0.95rem;
+    }
+
+    .rail nav a {
+      display: block;
+      text-decoration: none;
+      padding: 0.15rem 0;
+    }
+
+    .marginnote {
+      font-size: 0.92rem;
+      padding-left: 0.85rem;
+      border-left: 2px solid var(--line);
+      margin-top: 0.85rem;
+    }
+
+    @media (max-width: 1024px) {
+      .hero,
+      .main {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <span>{{MODE}} visual brief</span>
+      <span>{{SOURCE_SCOPE}} | {{DATE_OR_COMMIT_RANGE}}</span>
+    </div>
+
+    <section class="hero">
+      <figure class="hero-image-card">
+        <img class="hero-image" src="{{HERO_IMAGE}}" alt="{{HERO_ALT}}" />
+        <figcaption class="caption">{{HERO_CAPTION}}</figcaption>
+        <div class="caption-meta">{{HERO_PROVENANCE}}</div>
+      </figure>
+
+      <div class="hero-copy">
+        <div>
+          <div class="eyebrow">{{EYEBROW}}</div>
+          <h1>{{TITLE}}</h1>
+          <p class="subtitle">{{ONE_SENTENCE_PURPOSE}}</p>
+          <div class="summary">
+            <span>{{SUMMARY_1}}</span>
+            <span>{{SUMMARY_2}}</span>
+            <span>{{SUMMARY_3}}</span>
+          </div>
+        </div>
+        <p class="meta">{{META_LINE}}</p>
+      </div>
+    </section>
+
+    <div class="main">
+      <div class="stack">
+        <section id="overview" class="panel">
+          <h2>Overview</h2>
+          <p>{{OVERVIEW_TEXT}}</p>
+          <div class="callout">{{KEY_TAKEAWAY}}</div>
+        </section>
+
+        <section id="mental-model" class="figure-card">
+          <h2>System Picture</h2>
+          <img src="{{MENTAL_MODEL_IMAGE}}" alt="{{MENTAL_MODEL_ALT}}" />
+          <p class="caption">{{MENTAL_MODEL_CAPTION}}</p>
+          <div class="caption-meta">{{MENTAL_MODEL_PROVENANCE}}</div>
+          <div class="marginnote">{{MENTAL_MODEL_NOTE}}</div>
+        </section>
+
+        <section id="architecture" class="figure-card">
+          <h2>Architecture</h2>
+          <div class="annotated">
+            <img src="{{ARCHITECTURE_IMAGE}}" alt="{{ARCHITECTURE_ALT}}" />
+            <div class="overlay">
+              <div class="label" style="top: 12%; left: 6%;">{{OVERLAY_LABEL_1}}</div>
+              <div class="label" style="top: 50%; left: 58%;">{{OVERLAY_LABEL_2}}</div>
+              <div class="label" style="bottom: 8%; left: 28%;">{{OVERLAY_LABEL_3}}</div>
+            </div>
+          </div>
+          <p class="caption">{{ARCHITECTURE_CAPTION}}</p>
+          <div class="caption-meta">{{ARCHITECTURE_PROVENANCE}}</div>
+        </section>
+
+        <section id="details" class="panel">
+          <h2>Key Areas</h2>
+          <div class="tabs" role="tablist" aria-label="Detail views">
+            <button type="button" aria-selected="true" data-tab="files">Files</button>
+            <button type="button" aria-selected="false" data-tab="flow">Flow</button>
+            <button type="button" aria-selected="false" data-tab="changes">Changes</button>
+          </div>
+          <div data-panel="files" class="active">{{FILES_PANEL}}</div>
+          <div data-panel="flow">{{FLOW_PANEL}}</div>
+          <div data-panel="changes">{{CHANGES_PANEL}}</div>
+        </section>
+
+        <section id="usage" class="panel">
+          <h2>How To Use It</h2>
+          <button class="copy-btn" type="button" data-copy-target="cmds">Copy</button>
+          <pre id="cmds">{{COMMANDS_BLOCK}}</pre>
+        </section>
+
+        <section id="risks" class="panel">
+          <h2>Risks And Open Questions</h2>
+          {{RISKS_CONTENT}}
+        </section>
+      </div>
+
+      <aside class="rail">
+        <section>
+          <h3>On This Page</h3>
+          <nav>
+            <a href="#overview">Overview</a>
+            <a href="#mental-model">System Picture</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#details">Key Areas</a>
+            <a href="#usage">How To Use It</a>
+            <a href="#risks">Risks</a>
+          </nav>
+        </section>
+        <section>
+          <h3>Read Next</h3>
+          {{READ_NEXT}}
+        </section>
+        <section>
+          <h3>Sources</h3>
+          {{SOURCES_LIST}}
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll("[data-tab]");
+    const panels = document.querySelectorAll("[data-panel]");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const next = button.dataset.tab;
+        buttons.forEach((candidate) => {
+          candidate.setAttribute("aria-selected", String(candidate === button));
+        });
+        panels.forEach((panel) => {
+          panel.classList.toggle("active", panel.dataset.panel === next);
+        });
+      });
+    });
+
+    document.querySelectorAll("[data-copy-target]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const target = document.getElementById(button.dataset.copyTarget);
+        if (!target) return;
+        await navigator.clipboard.writeText(target.innerText);
+        button.textContent = "Copied";
+        setTimeout(() => { button.textContent = "Copy"; }, 1200);
+      });
+    });
+  </script>
+</body>
+</html>
