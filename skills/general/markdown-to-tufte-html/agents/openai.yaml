@@ -1,0 +1,6 @@
+interface:
+  display_name: "Markdown To Tufte HTML"
+  short_description: "Render markdown into a self-contained Tufte-style HTML document."
+
+policy:
+  allow_implicit_invocation: true
