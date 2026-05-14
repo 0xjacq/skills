@@ -7,27 +7,28 @@
   <style>
     :root {
       --bg: #f7f2ea;
-      --paper: rgba(255, 251, 246, 0.88);
+      --paper: rgba(255, 251, 246, 0.92);
       --panel: #fffaf4;
       --fg: #171412;
       --muted: #665f59;
       --line: rgba(89, 71, 53, 0.18);
       --accent: #9f4f2d;
-      --accent-soft: rgba(159, 79, 45, 0.12);
+      --accent-soft: rgba(159, 79, 45, 0.10);
       --sans: "Avenir Next", "Segoe UI", sans-serif;
       --serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
       --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-      --max: 84rem;
+      --max: 86rem;
     }
 
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: var(--serif);
       color: var(--fg);
       background:
-        radial-gradient(circle at top left, rgba(159, 79, 45, 0.10), transparent 28rem),
-        linear-gradient(180deg, #fcf7f0 0%, var(--bg) 32%, #f3ede4 100%);
+        radial-gradient(circle at top left, rgba(159, 79, 45, 0.08), transparent 30rem),
+        linear-gradient(180deg, #fcf7f0 0%, var(--bg) 34%, #f3ede4 100%);
       line-height: 1.55;
     }
 
@@ -40,61 +41,42 @@
       padding: 1.25rem 1.25rem 4rem;
     }
 
+    .topbar,
+    .meta,
+    .summary,
+    .rail,
+    .tabs,
+    .copy-btn,
+    .caption-meta,
+    .section-kicker {
+      font-family: var(--sans);
+    }
+
     .topbar {
       display: flex;
       justify-content: space-between;
       gap: 1rem;
-      font-family: var(--sans);
       font-size: 0.92rem;
       color: var(--muted);
       margin-bottom: 1rem;
     }
 
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
-      gap: 1rem;
-      align-items: stretch;
-      margin-bottom: 2rem;
-    }
-
-    .hero-image-card,
-    .hero-copy,
+    .header,
     .panel,
-    .figure-card {
+    .figure-card,
+    .rail section {
       background: var(--paper);
       border: 1px solid var(--line);
       backdrop-filter: blur(10px);
     }
 
-    .hero-image-card {
-      padding: 0.9rem;
-    }
-
-    .hero-image {
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      border: 1px solid var(--line);
-    }
-
-    .hero-copy {
+    .header {
       padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .eyebrow,
-    .meta,
-    .summary,
-    .rail,
-    .tabs,
-    .caption-meta,
-    .copy-btn {
-      font-family: var(--sans);
+      margin-bottom: 1rem;
     }
 
     .eyebrow {
+      font-family: var(--sans);
       color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -108,16 +90,16 @@
       margin: 0 0 0.8rem;
     }
 
-    h1 { font-size: clamp(2.2rem, 5vw, 4rem); }
-    h2 { font-size: 1.55rem; margin-top: 0; }
+    h1 { font-size: clamp(2.1rem, 5vw, 3.6rem); }
+    h2 { font-size: 1.55rem; }
     h3 { font-size: 1.05rem; }
 
     .subtitle,
     .meta,
     .caption,
     .caption-meta,
-    .rail,
-    .marginnote {
+    .marginnote,
+    .rail {
       color: var(--muted);
     }
 
@@ -152,10 +134,57 @@
       padding: 1.15rem;
     }
 
-    .figure-card img {
+    .section-kicker {
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 0.65rem;
+    }
+
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-soft);
+      padding: 0.85rem 0.95rem;
+      margin: 1rem 0 0;
+    }
+
+    .diagram-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(16rem, 0.9fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .diagram-stage {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 0.85rem;
+      min-height: 20rem;
+    }
+
+    .diagram-stage svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .support-slot {
+      display: grid;
+      gap: 0.75rem;
+      align-content: start;
+    }
+
+    .support-visual {
+      border: 1px solid var(--line);
+      background: #fcf8f2;
+      padding: 0.75rem;
+    }
+
+    .support-visual img {
       width: 100%;
       border: 1px solid var(--line);
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.75rem;
     }
 
     .caption-meta {
@@ -165,43 +194,11 @@
       margin-top: 0.35rem;
     }
 
-    .annotated {
-      position: relative;
-      border: 1px solid var(--line);
-      background: #fcf8f2;
-      min-height: 18rem;
-      overflow: hidden;
-    }
-
-    .annotated img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.92;
-    }
-
-    .overlay {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .overlay .label {
-      position: absolute;
-      max-width: 13rem;
-      padding: 0.55rem 0.65rem;
-      font-family: var(--sans);
-      font-size: 0.88rem;
-      background: rgba(255, 250, 244, 0.92);
-      border: 1px solid var(--line);
-      box-shadow: 0 0.4rem 1.4rem rgba(35, 25, 18, 0.08);
-    }
-
-    .callout {
-      border-left: 3px solid var(--accent);
-      background: var(--accent-soft);
-      padding: 0.85rem 0.95rem;
-      margin: 1rem 0;
+    .marginnote {
+      font-size: 0.92rem;
+      padding-left: 0.85rem;
+      border-left: 2px solid var(--line);
+      margin-top: 0.85rem;
     }
 
     .tabs {
@@ -262,8 +259,6 @@
     }
 
     .rail section {
-      background: rgba(255, 251, 246, 0.7);
-      border: 1px solid var(--line);
       padding: 0.95rem;
     }
 
@@ -273,16 +268,9 @@
       padding: 0.15rem 0;
     }
 
-    .marginnote {
-      font-size: 0.92rem;
-      padding-left: 0.85rem;
-      border-left: 2px solid var(--line);
-      margin-top: 0.85rem;
-    }
-
-    @media (max-width: 1024px) {
-      .hero,
-      .main {
+    @media (max-width: 1100px) {
+      .main,
+      .diagram-grid {
         grid-template-columns: 1fr;
       }
 
@@ -299,77 +287,85 @@
       <span>{{SOURCE_SCOPE}} | {{DATE_OR_COMMIT_RANGE}}</span>
     </div>
 
-    <section class="hero">
-      <figure class="hero-image-card">
-        <img class="hero-image" src="{{HERO_IMAGE}}" alt="{{HERO_ALT}}" />
-        <figcaption class="caption">{{HERO_CAPTION}}</figcaption>
-        <div class="caption-meta">{{HERO_PROVENANCE}}</div>
-      </figure>
-
-      <div class="hero-copy">
-        <div>
-          <div class="eyebrow">{{EYEBROW}}</div>
-          <h1>{{TITLE}}</h1>
-          <p class="subtitle">{{ONE_SENTENCE_PURPOSE}}</p>
-          <div class="summary">
-            <span>{{SUMMARY_1}}</span>
-            <span>{{SUMMARY_2}}</span>
-            <span>{{SUMMARY_3}}</span>
-          </div>
-        </div>
-        <p class="meta">{{META_LINE}}</p>
+    <header class="header">
+      <div class="eyebrow">{{EYEBROW}}</div>
+      <h1>{{TITLE}}</h1>
+      <p class="subtitle">{{ONE_SENTENCE_PURPOSE}}</p>
+      <div class="summary">
+        <span>{{SUMMARY_1}}</span>
+        <span>{{SUMMARY_2}}</span>
+        <span>{{SUMMARY_3}}</span>
       </div>
-    </section>
+      <p class="meta">{{META_LINE}}</p>
+    </header>
+
+    {{OPTIONAL_HERO_SECTION}}
 
     <div class="main">
       <div class="stack">
         <section id="overview" class="panel">
-          <h2>Overview</h2>
+          <div class="section-kicker">Overview</div>
+          <h2>What This Project Does</h2>
           <p>{{OVERVIEW_TEXT}}</p>
           <div class="callout">{{KEY_TAKEAWAY}}</div>
         </section>
 
-        <section id="mental-model" class="figure-card">
-          <h2>System Picture</h2>
-          <img src="{{MENTAL_MODEL_IMAGE}}" alt="{{MENTAL_MODEL_ALT}}" />
-          <p class="caption">{{MENTAL_MODEL_CAPTION}}</p>
-          <div class="caption-meta">{{MENTAL_MODEL_PROVENANCE}}</div>
-          <div class="marginnote">{{MENTAL_MODEL_NOTE}}</div>
-        </section>
+        {{OPTIONAL_OPERATING_PICTURE_SECTION}}
 
-        <section id="architecture" class="figure-card">
-          <h2>Architecture</h2>
-          <div class="annotated">
-            <img src="{{ARCHITECTURE_IMAGE}}" alt="{{ARCHITECTURE_ALT}}" />
-            <div class="overlay">
-              <div class="label" style="top: 12%; left: 6%;">{{OVERLAY_LABEL_1}}</div>
-              <div class="label" style="top: 50%; left: 58%;">{{OVERLAY_LABEL_2}}</div>
-              <div class="label" style="bottom: 8%; left: 28%;">{{OVERLAY_LABEL_3}}</div>
+        {{OPTIONAL_TECHNICAL_OPERATING_PICTURE_SECTION}}
+
+        <section id="system-map" class="figure-card">
+          <div class="section-kicker">System Map</div>
+          <h2>Modules And Responsibilities</h2>
+          <div class="diagram-grid">
+            <div class="diagram-stage">
+              {{SYSTEM_MAP_SVG}}
+            </div>
+            <div class="support-slot">
+              {{SYSTEM_MAP_SUPPORT_SECTION}}
             </div>
           </div>
-          <p class="caption">{{ARCHITECTURE_CAPTION}}</p>
-          <div class="caption-meta">{{ARCHITECTURE_PROVENANCE}}</div>
+          <p class="caption">{{SYSTEM_MAP_CAPTION}}</p>
+          <div class="marginnote">{{SYSTEM_MAP_NOTE}}</div>
+        </section>
+
+        <section id="main-flow" class="figure-card">
+          <div class="section-kicker">Main Flow</div>
+          <h2>Primary Data Or Control Path</h2>
+          <div class="diagram-grid">
+            <div class="diagram-stage">
+              {{MAIN_FLOW_SVG}}
+            </div>
+            <div class="support-slot">
+              {{MAIN_FLOW_SUPPORT_SECTION}}
+            </div>
+          </div>
+          <p class="caption">{{MAIN_FLOW_CAPTION}}</p>
+          <div class="marginnote">{{MAIN_FLOW_NOTE}}</div>
         </section>
 
         <section id="details" class="panel">
-          <h2>Key Areas</h2>
+          <div class="section-kicker">Key Areas</div>
+          <h2>Key Files And Sections</h2>
           <div class="tabs" role="tablist" aria-label="Detail views">
             <button type="button" aria-selected="true" data-tab="files">Files</button>
-            <button type="button" aria-selected="false" data-tab="flow">Flow</button>
+            <button type="button" aria-selected="false" data-tab="interfaces">Interfaces</button>
             <button type="button" aria-selected="false" data-tab="changes">Changes</button>
           </div>
           <div data-panel="files" class="active">{{FILES_PANEL}}</div>
-          <div data-panel="flow">{{FLOW_PANEL}}</div>
+          <div data-panel="interfaces">{{INTERFACES_PANEL}}</div>
           <div data-panel="changes">{{CHANGES_PANEL}}</div>
         </section>
 
         <section id="usage" class="panel">
-          <h2>How To Use It</h2>
+          <div class="section-kicker">Usage</div>
+          <h2>How To Run Or Navigate It</h2>
           <button class="copy-btn" type="button" data-copy-target="cmds">Copy</button>
           <pre id="cmds">{{COMMANDS_BLOCK}}</pre>
         </section>
 
         <section id="risks" class="panel">
+          <div class="section-kicker">Risks</div>
           <h2>Risks And Open Questions</h2>
           {{RISKS_CONTENT}}
         </section>
@@ -380,10 +376,11 @@
           <h3>On This Page</h3>
           <nav>
             <a href="#overview">Overview</a>
-            <a href="#mental-model">System Picture</a>
-            <a href="#architecture">Architecture</a>
+            {{OPTIONAL_VISUAL_NAV_LINKS}}
+            <a href="#system-map">System Map</a>
+            <a href="#main-flow">Main Flow</a>
             <a href="#details">Key Areas</a>
-            <a href="#usage">How To Use It</a>
+            <a href="#usage">Usage</a>
             <a href="#risks">Risks</a>
           </nav>
         </section>
