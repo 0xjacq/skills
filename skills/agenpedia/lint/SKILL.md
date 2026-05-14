@@ -1,6 +1,7 @@
 ---
 name: "lint"
-description: "Check wiki health: broken wikilinks, orphan pages, missing entities/concepts, coverage gaps, contradictions, stale information. Fixes actionable issues and suggests growth directions."
+description: "Run a wiki health pass for an Agenpedia wiki. Use when the user wants structural cleanup, maintenance, or a pre-commit review, not for ordinary wiki questions or ingest requests."
+disable-model-invocation: false
 user-invocable: true
 ---
 
@@ -16,17 +17,19 @@ format, and log format. All operations below must conform to those rules.
 
 ## Determine Mode
 
-This skill can be invoked in two modes:
+This skill can run in two contexts:
 
 - **Manual / pre-commit mode**: invoked directly by the user or during
   a pre-commit check. Run ALL checks including growth suggestions.
-- **Auto-triggered mode**: invoked by another skill (e.g., the `ingest`
-  skill auto-triggered lint). Skip growth suggestions — only run
+- **Auto-maintenance mode**: invoked after `ingest` or `ingest-batch`,
+  whether that follow-on step was requested directly or loaded
+  implicitly from context. Skip growth suggestions — only run
   structural checks and report contradictions.
 
 To determine mode: if the conversation shows that `ingest` or
-`ingest-batch` just ran and this lint was auto-triggered, use
-auto-triggered mode. Otherwise, use manual mode.
+`ingest-batch` just ran and this lint is acting as a follow-on
+maintenance step, use auto-maintenance mode. Otherwise, use manual
+mode.
 
 ## Checks
 
@@ -102,7 +105,7 @@ that references time-sensitive information (e.g., "currently",
 
 ## Growth Suggestions (Manual Mode Only)
 
-Skip this section entirely in auto-triggered mode.
+Skip this section entirely in auto-maintenance mode.
 
 In manual mode, after completing all checks:
 
@@ -140,7 +143,7 @@ Produce a structured report:
 (list of changes made)
 
 ### Growth Suggestions (manual mode only)
-(suggestions or omitted in auto-triggered mode)
+(suggestions or omitted in auto-maintenance mode)
 ```
 
 ## Log Entry

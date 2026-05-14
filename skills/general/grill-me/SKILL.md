@@ -1,6 +1,6 @@
 ---
 name: "grill-me"
-description: "Stress-test a plan or design by interrogating assumptions, dependencies, tradeoffs, and edge cases one question at a time. Use when the user wants to be grilled on a proposal, architecture, implementation plan, migration, API, or explicitly says 'grill me'."
+description: "Stress-test a plan or design through one question at a time. Use when the user explicitly wants to be grilled on an architecture, API, migration, or implementation plan instead of getting a finished answer immediately."
 argument-hint: "<plan-or-design>"
 disable-model-invocation: true
 user-invocable: true

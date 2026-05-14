@@ -1,6 +1,6 @@
 ---
 name: "grill-me-light"
-description: "Run a short, high-leverage stress-test of a plan or design by asking only the highest-impact questions one at a time. Use when the user wants a lighter or faster version of 'grill me', explicitly says 'grill-me-light', or asks for a concise review."
+description: "Run a short grilling pass on a plan or design. Use when the user explicitly wants a lighter or faster version of Grill Me that focuses only on the highest-leverage questions."
 argument-hint: "<plan-or-design>"
 disable-model-invocation: true
 user-invocable: true

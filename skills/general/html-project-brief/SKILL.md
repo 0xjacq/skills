@@ -1,8 +1,8 @@
 ---
 name: "html-project-brief"
-description: "Create self-contained HTML project briefings from codebases, markdown docs, technical plans, diffs, research notes, or structured project data. Use when the goal is to help humans understand what a project does, how it works, how to use it, what changed, and what to read next. Supports onboarding briefs, architecture explainers, usage guides, subsystem explainers, and change briefs, with lightweight interactivity and a Tufte-inspired default theme."
+description: "Create or refresh a self-contained HTML project brief for humans. Use when the user explicitly wants an onboarding, architecture, usage, change, or research brief, not a product UI or app feature."
 argument-hint: "[optional brief request]"
-disable-model-invocation: false
+disable-model-invocation: true
 user-invocable: true
 ---
 

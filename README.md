@@ -4,6 +4,8 @@ Open collection of agent skills by [0xjacq](https://github.com/0xjacq).
 
 Built on the [`npx skills`](https://github.com/vercel-labs/skills) standard — compatible with Claude Code, Gemini CLI, OpenCode, Kilo Code, Pi, Codex, and 50+ other coding agents.
 
+Each skill keeps reusable workflow instructions in `SKILL.md`, pushes heavy reference material into `references/` or `scripts/`, and now ships Codex-specific UI and invocation metadata in `agents/openai.yaml`. The collection is tuned against current OpenAI Codex and Anthropic skill-authoring guidance while remaining portable across agent runtimes.
+
 ## Categories
 
 | Category | Skills | Description |
@@ -14,44 +16,27 @@ Built on the [`npx skills`](https://github.com/vercel-labs/skills) standard — 
 
 ## Install
 
-### Install a category
+Install any category URL with `npx skills`:
 
 ```bash
-# Install all agenpedia skills (auto-detects your installed coding agents)
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia --all
+# Install one category for all detected agents
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/<category> --all
 
-# Install all general skills
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/general --all
-
-# Install all tools skills
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools --all
-
-# Install to a specific agent
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a claude-code
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a claude-code
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a claude-code
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a gemini-cli
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a gemini-cli
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a gemini-cli
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a opencode
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a opencode
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a opencode
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a kilo
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a kilo
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a kilo
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a pi
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a pi
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a pi
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a codex
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a codex
-npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a codex
+# Install one category for a specific agent
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/<category> -a <agent>
 ```
+
+Valid categories: `agenpedia`, `general`, `tools`
+
+Common agents: `claude-code`, `gemini-cli`, `opencode`, `kilo`, `pi`, `codex`
 
 ### Update
 
 ```bash
 npx skills update
 ```
+
+For the runtime-backed `tools` category, see [skills/tools/README.md](./skills/tools/README.md) for prerequisites, local testing, and sync workflow details.
 
 ## Agenpedia Skills
 

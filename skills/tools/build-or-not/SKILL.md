@@ -1,6 +1,6 @@
 ---
 name: "build-or-not"
-description: "Assess whether a capability already exists closely enough that you should reuse or adapt it instead of building from scratch. Use for requests like 'should I build this?', 'am I reinventing the wheel?', 'does a tool/startup/package already exist for this?', or 'what already exists before we build?'."
+description: "Assess whether a capability should be reused, adapted, or built from scratch. Use when the user asks whether something already exists or whether building it would reinvent the wheel."
 argument-hint: "[capability or product idea to assess]"
 disable-model-invocation: false
 user-invocable: true

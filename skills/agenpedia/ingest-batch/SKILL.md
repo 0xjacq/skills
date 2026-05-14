@@ -1,6 +1,6 @@
 ---
 name: "ingest-batch"
-description: "Batch-triage and ingest multiple sources. Scans raw/ for uncovered files, presents INGEST/SKIP/MERGE verdicts, then sequentially processes approved sources via /ingest."
+description: "Batch-triage raw sources for an Agenpedia wiki. Use when the user explicitly wants multiple files reviewed and processed through Wiki Ingest, not when they only need wiki answers or a single-source ingest."
 argument-hint: "<optional: pasted text with multiple notes, or directory path to scan>"
 disable-model-invocation: true
 user-invocable: true

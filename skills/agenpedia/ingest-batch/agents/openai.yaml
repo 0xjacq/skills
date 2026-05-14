@@ -1,0 +1,6 @@
+interface:
+  display_name: "Wiki Batch Ingest"
+  short_description: "Triage multiple raw sources before handing approved ones to Wiki Ingest."
+
+policy:
+  allow_implicit_invocation: false

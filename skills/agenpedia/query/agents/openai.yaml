@@ -1,0 +1,6 @@
+interface:
+  display_name: "Wiki Query"
+  short_description: "Answer questions from existing Agenpedia wiki pages and cite them."
+
+policy:
+  allow_implicit_invocation: true

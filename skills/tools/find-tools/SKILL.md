@@ -1,6 +1,6 @@
 ---
 name: "find-tools"
-description: "Find the best existing tool, package, framework, repo, product, MCP server, or skill for a capability. Use when the user wants a concrete recommendation rather than a build-vs-buy verdict."
+description: "Recommend the best existing tool for a capability. Use when the user wants one concrete tool, package, framework, repo, product, MCP server, or skill choice plus alternatives, not a build-vs-buy verdict."
 argument-hint: "[tool query or capability to satisfy]"
 disable-model-invocation: false
 user-invocable: true

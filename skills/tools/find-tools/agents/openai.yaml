@@ -1,0 +1,6 @@
+interface:
+  display_name: "Find Tools"
+  short_description: "Recommend the best existing tool for a capability with alternatives."
+
+policy:
+  allow_implicit_invocation: true

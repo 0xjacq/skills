@@ -134,8 +134,27 @@ def build_markdown(url: str, transcript: str) -> str:
     )
 
 
+def get_repo_root() -> Path:
+    return Path(__file__).resolve().parents[4]
+
+
+def resolve_raw_dir(raw_dir_value: str, repo_root: Path) -> Path:
+    raw_dir = Path(raw_dir_value).expanduser()
+    if raw_dir.is_absolute():
+        return raw_dir
+    return repo_root / raw_dir
+
+
+def render_output_path(output_path: Path, repo_root: Path) -> str:
+    try:
+        return output_path.relative_to(repo_root).as_posix()
+    except ValueError:
+        return output_path.as_posix()
+
+
 def main() -> int:
     args = parse_args()
+    repo_root = get_repo_root()
 
     try:
         cli = resolve_cli(args.cli_path)
@@ -143,7 +162,7 @@ def main() -> int:
         print(str(exc), file=sys.stderr)
         return 1
 
-    raw_dir = Path(args.raw_dir)
+    raw_dir = resolve_raw_dir(args.raw_dir, repo_root)
     raw_dir.mkdir(parents=True, exist_ok=True)
 
     temp_dir = Path(tempfile.mkdtemp(prefix="ingest-youtube-"))
@@ -166,7 +185,7 @@ def main() -> int:
 
         output_path = choose_output_path(raw_dir, extract_video_id(args.url))
         output_path.write_text(build_markdown(args.url, transcript), encoding="utf-8")
-        print(output_path.as_posix())
+        print(render_output_path(output_path, repo_root))
 
         if args.keep_temp:
             print(f"Temporary output kept at: {temp_dir}", file=sys.stderr)

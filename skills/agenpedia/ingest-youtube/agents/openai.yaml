@@ -1,0 +1,6 @@
+interface:
+  display_name: "YouTube Ingest"
+  short_description: "Transcribe one YouTube video into repo-root raw/ and hand it to Wiki Ingest."
+
+policy:
+  allow_implicit_invocation: false

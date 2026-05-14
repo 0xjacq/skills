@@ -1,0 +1,6 @@
+interface:
+  display_name: "Wiki Lint"
+  short_description: "Run a wiki health pass and repair structural issues in an Agenpedia wiki."
+
+policy:
+  allow_implicit_invocation: true

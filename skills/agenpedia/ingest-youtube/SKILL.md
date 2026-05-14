@@ -1,8 +1,8 @@
 ---
 name: "ingest-youtube"
-description: "Transcribe a single YouTube video with a local `yt2txt.sh` CLI, save the raw transcript as a markdown source in `raw/`, then hand that file to the Agenpedia `ingest` workflow. Use when the user gives a YouTube video URL and wants it added to the wiki knowledge base."
+description: "Transcribe one YouTube video into the repo-root `raw/` directory for an Agenpedia wiki. Use when the user explicitly wants that video added to the wiki through the existing ingest workflow."
 argument-hint: "<youtube-video-url>"
-disable-model-invocation: false
+disable-model-invocation: true
 user-invocable: true
 ---
 
@@ -35,11 +35,14 @@ is missing.
 2. Run:
 
    ```bash
+   cd skills/agenpedia/ingest-youtube
    python3 scripts/fetch_youtube_transcript.py "<youtube-url>"
    ```
 
 3. The script writes a markdown source file under `raw/` and prints the
-   relative file path on stdout, for example `raw/youtube-abc123xyz89.md`.
+   repo-relative file path on stdout, for example
+   `raw/youtube-abc123xyz89.md`, even though the script is launched from
+   inside the skill directory.
 4. Verify that the printed file exists and contains the raw transcript.
    Do not summarize, translate, or clean the transcript unless the user
    asked for that separately.

@@ -1,6 +1,6 @@
 ---
 name: "ingest"
-description: "Ingest a source into the wiki knowledge base. Reads, classifies, confronts existing knowledge, verifies claims, discusses with the user, then creates wiki pages with cross-references."
+description: "Ingest source material into an Agenpedia wiki. Use when the user wants raw files, URLs, pasted text, or researched topics turned into wiki pages, not when they only need answers from the existing wiki."
 argument-hint: "<source: file path in raw/, URL, pasted text, or topic to search>"
 disable-model-invocation: false
 user-invocable: true

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Build Or Not"
+  short_description: "Assess whether a capability should be reused, adapted, or built from scratch."
+
+policy:
+  allow_implicit_invocation: true

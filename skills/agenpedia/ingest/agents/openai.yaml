@@ -1,0 +1,6 @@
+interface:
+  display_name: "Wiki Ingest"
+  short_description: "Turn approved source material into Agenpedia wiki pages."
+
+policy:
+  allow_implicit_invocation: true

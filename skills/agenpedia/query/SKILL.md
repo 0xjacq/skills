@@ -1,8 +1,8 @@
 ---
 name: "query"
-description: "Query the wiki knowledge base with a natural language question. Consults the index, reads relevant pages, answers with wikilink citations, and optionally files a synthesis page."
+description: "Answer natural-language questions from an Agenpedia wiki. Use when the user wants information from existing wiki pages, not when they need new sources ingested or a maintenance workflow run."
 argument-hint: "<question>"
-disable-model-invocation: true
+disable-model-invocation: false
 user-invocable: true
 ---
 
