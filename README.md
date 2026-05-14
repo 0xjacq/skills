@@ -10,6 +10,7 @@ Built on the [`npx skills`](https://github.com/vercel-labs/skills) standard — 
 |----------|--------|-------------|
 | [`agenpedia`](./skills/agenpedia/) | `ingest`, `ingest-youtube`, `ingest-batch`, `query`, `lint` | Markdown wiki knowledge base workflows |
 | [`general`](./skills/general/) | `grill-me`, `grill-me-light`, `html-project-brief` | Cross-project planning, design review, and visual project briefing |
+| [`tools`](./skills/tools/) | `build-or-not`, `find-tools` | Tooling and pre-build diligence orchestration skills |
 
 ## Install
 
@@ -22,19 +23,28 @@ npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia --all
 # Install all general skills
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/general --all
 
+# Install all tools skills
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools --all
+
 # Install to a specific agent
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a claude-code
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a claude-code
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a claude-code
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a gemini-cli
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a gemini-cli
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a gemini-cli
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a opencode
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a opencode
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a opencode
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a kilo
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a kilo
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a kilo
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a pi
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a pi
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a pi
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/agenpedia -a codex
 npx skills add https://github.com/0xjacq/skills/tree/main/skills/general -a codex
+npx skills add https://github.com/0xjacq/skills/tree/main/skills/tools -a codex
 ```
 
 ### Update
@@ -64,6 +74,15 @@ Reusable skills that are not tied to a specific product or schema.
 | `grill-me` | Stress-test a plan or design one decision at a time |
 | `grill-me-light` | Run a short, high-leverage stress-test of a plan or design |
 | `html-project-brief` | Turn repos, docs, and diffs into self-contained HTML project briefings |
+
+## Tools Skills
+
+Runtime-backed skills that orchestrate external engines and return structured artifacts.
+
+| Skill | Description |
+|-------|-------------|
+| `build-or-not` | Run a conservative prior-art and reuse check before recommending a greenfield build |
+| `find-tools` | Find the current best-fit tool, package, framework, repo, or product for a capability |
 
 ## License
 

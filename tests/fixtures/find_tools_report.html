@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Find-Tools Report</title>
+  <style>
+    :root {
+      --bg: #f7f4ec;
+      --fg: #1d1a17;
+      --muted: #655c52;
+      --line: #d7cbb8;
+      --accent: #7e3b12;
+      --card: #fffdf8;
+      --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+      --sans: "Avenir Next", "Segoe UI", sans-serif;
+      --serif: "Iowan Old Style", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #f4efe4 0%, #fbfaf6 28%, #f7f4ec 100%);
+      color: var(--fg);
+      font-family: var(--serif);
+      line-height: 1.55;
+    }
+    .page {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+    header {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 1.5rem;
+    }
+    h1, h2 {
+      font-weight: 600;
+      line-height: 1.1;
+    }
+    h1 { margin: 0 0 0.5rem; font-size: 2.3rem; }
+    h2 { margin-top: 2rem; font-size: 1.35rem; }
+    .deck {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      gap: 0.75rem;
+      margin: 1rem 0 0;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 0.9rem;
+    }
+    .label {
+      font-family: var(--sans);
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .value {
+      font-size: 1.05rem;
+      margin-top: 0.25rem;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
+      gap: 1.5rem;
+    }
+    .rail {
+      background: rgba(255, 253, 248, 0.78);
+      border: 1px solid var(--line);
+      padding: 1rem;
+      align-self: start;
+      position: sticky;
+      top: 1rem;
+    }
+    .panel {
+      background: rgba(255, 253, 248, 0.88);
+      border: 1px solid var(--line);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+    th, td {
+      text-align: left;
+      padding: 0.7rem 0.6rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th {
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    code {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+    }
+    a { color: var(--accent); }
+    ul { padding-left: 1.25rem; }
+    @media (max-width: 920px) {
+      .layout { grid-template-columns: 1fr; }
+      .rail { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="label">Find-Tools runtime report</div>
+      <h1>python framework for agent orchestration</h1>
+      <p>A strongest candidate surfaced with enough corroboration to recommend it as the current best fit.</p>
+      <div class="deck"><div class='card'><div class='label'>Decision</div><div class='value'><code>best_fit_found</code></div></div><div class='card'><div class='label'>Confidence</div><div class='value'><code>medium</code></div></div><div class='card'><div class='label'>Run ID</div><div class='value'><code>find-tools-test-5678</code></div></div><div class='card'><div class='label'>Recommended type</div><div class='value'><code>package</code></div></div></div>
+    </header>
+    <div class="layout">
+      <main>
+        <section class="panel">
+          <h2>Best Fit</h2>
+          <table><thead><tr><th>Candidate</th><th>Type</th><th>Confidence</th><th>Corroboration</th><th>Rationale</th></tr></thead><tbody><tr><td><a href='https://pypi.org/project/langgraph'>langgraph</a><div>Agent orchestration framework with Python package distribution.</div></td><td><code>package</code></td><td><code>medium</code></td><td>primary=1, secondary=1, discussion=0, structured=pypi,github</td><td>1 Exa corroboration hit(s); structured sources: pypi, github; fit labels: agent_platform, open_source</td></tr></tbody></table>
+        </section>
+        <section>
+          <h2>Alternatives</h2>
+          <table><thead><tr><th>Candidate</th><th>Type</th><th>Confidence</th><th>Corroboration</th><th>Rationale</th></tr></thead><tbody><tr><td><a href='https://pypi.org/project/crewai'>crewAI</a><div>Multi-agent workflow framework.</div></td><td><code>package</code></td><td><code>medium</code></td><td>primary=1, secondary=0, discussion=0, structured=pypi</td><td>structured sources: pypi; fit labels: agent_platform</td></tr><tr><td><a href='https://github.com/microsoft/autogen'>AutoGen</a><div>Open source framework for agentic workflows.</div></td><td><code>repo</code></td><td><code>medium</code></td><td>primary=1, secondary=1, discussion=1, structured=github,repo_posts</td><td>structured sources: github, repo_posts; fit labels: agent_platform, open_source</td></tr></tbody></table>
+        </section>
+        <section class="panel">
+          <h2>Near Misses</h2>
+          <table><thead><tr><th>Candidate</th><th>Type</th><th>Confidence</th><th>Corroboration</th><th>Rationale</th></tr></thead><tbody><tr><td><a href='https://temporal.io'>Temporal</a><div>Workflow engine with adjacent orchestration primitives but not an agent-first framework.</div></td><td><code>product</code></td><td><code>low</code></td><td>primary=1, secondary=0, discussion=0, structured=github</td><td>Adjacent workflow engine, not agent-first.</td></tr></tbody></table>
+        </section>
+        <section class="panel">
+          <h2>Exa Evidence</h2>
+          <ul><li><strong>LangGraph docs</strong> (primary) <a href='https://langchain-ai.github.io/langgraph/'>https://langchain-ai.github.io/langgraph/</a><div>Build stateful, multi-actor agent systems.</div></li></ul>
+        </section>
+        </main>
+      <aside class="rail">
+        <section>
+          <h2>Artifacts</h2>
+          <ul>
+            <li><code>/tmp/find-tools-test-5678/result.json</code></li>
+            <li><code>/tmp/find-tools-test-5678/canonical-report.md</code></li>
+            <li><code>/tmp/find-tools-test-5678/report.html</code></li>
+            <li><code>/tmp/find-tools-test-5678/audit</code></li>
+          </ul>
+        </section>
+    
+        <section>
+          <h2>Warnings</h2>
+          <ul><li>None</li></ul>
+        </section>
+    </aside>
+    </div>
+  </div>
+</body>
+</html>
