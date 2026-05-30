@@ -15,9 +15,11 @@
       --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
       --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      --max: 72rem;
+      --page-pad: clamp(1.25rem, 2.5vw, 2rem);
+      --rail: 13rem;
+      --gutter-min: 2rem;
       --main: 38rem;
-      --rail: 18rem;
+      --wide: calc(var(--main) + var(--gutter-min) + var(--rail));
     }
 
     * { box-sizing: border-box; }
@@ -31,16 +33,37 @@
     }
 
     article.page {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 2rem 1.25rem 5rem;
+      width: 100%;
+      padding: 2rem 0 5rem;
       counter-reset: sidenote-counter;
     }
 
     header {
-      border-bottom: 1px solid var(--line);
       margin-bottom: 2rem;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns:
+        minmax(var(--page-pad), 1fr)
+        minmax(0, var(--rail))
+        minmax(var(--gutter-min), 1fr)
+        minmax(0, var(--main))
+        minmax(var(--gutter-min), 1fr)
+        minmax(0, var(--rail))
+        minmax(var(--page-pad), 1fr);
+      align-items: start;
+    }
+
+    .header-main {
+      grid-column: 4;
+      min-width: 0;
       padding-bottom: 1rem;
+    }
+
+    .header-rule {
+      grid-column: 1 / -1;
+      border-bottom: 1px solid var(--line);
     }
 
     .meta, nav, .copy-btn, .sans {
@@ -66,33 +89,37 @@
 
     .subtitle, .meta {
       color: var(--muted);
-      max-width: 52rem;
     }
 
     .layout {
-      display: grid;
-      grid-template-columns: minmax(0, var(--main)) minmax(0, var(--rail));
-      gap: 2rem;
-      align-items: start;
+      row-gap: 0;
     }
 
-    .layout.no-rail {
-      grid-template-columns: minmax(0, var(--main));
+    main {
+      grid-column: 4;
+      min-width: 0;
     }
 
-    main { min-width: 0; }
-
-    aside {
+    .toc-rail {
+      grid-column: 2;
       position: sticky;
       top: 1rem;
+      justify-self: start;
+      width: 100%;
+      max-width: var(--rail);
       font-size: 0.95rem;
       color: var(--muted);
     }
 
-    aside section {
+    .toc-rail section {
       border-left: 2px solid var(--line);
       padding-left: 0.9rem;
       margin-bottom: 1.5rem;
+    }
+
+    .notes-gutter {
+      grid-column: 6;
+      min-height: 1px;
     }
 
     nav a {
@@ -133,6 +160,12 @@
     figure video {
       display: block;
       max-width: 100%;
+      height: auto;
+    }
+
+    .figure-wide svg {
+      display: block;
+      width: 100%;
       height: auto;
     }
 
@@ -189,7 +222,7 @@
 
     .fullwidth {
       margin: 1.5rem 0;
-      width: min(calc(100vw - 2.5rem), calc(var(--main) + var(--rail) + 2rem));
+      width: min(calc(100vw - (2 * var(--page-pad))), var(--wide));
       max-width: none;
     }
 
@@ -203,7 +236,7 @@
     .iframe-wrapper {
       position: relative;
       margin: 1.5rem 0;
-      width: min(calc(100vw - 2.5rem), calc(var(--main) + var(--rail) + 2rem));
+      width: min(calc(100vw - (2 * var(--page-pad))), var(--wide));
       max-width: none;
       padding-bottom: 56.25%;
       height: 0;
@@ -303,8 +336,9 @@
     .marginnote {
       float: right;
       clear: right;
-      width: 52%;
-      margin-right: -56%;
+      width: min(calc(var(--rail) - 1rem), 15rem);
+      margin-right: calc(-1 * (var(--gutter-min) + var(--rail)));
+      margin-left: 1rem;
       margin-bottom: 1rem;
       padding-left: 0.75rem;
       border-left: 2px solid var(--line);
@@ -329,9 +363,33 @@
       margin-bottom: 0.5rem;
     }
 
-    @media (max-width: 980px) {
-      .layout { grid-template-columns: 1fr; }
-      aside { position: static; order: -1; }
+    @media (max-width: 1279px) {
+      article.page {
+        padding: 2rem 0 5rem;
+      }
+      .page-grid {
+        grid-template-columns:
+          var(--page-pad)
+          minmax(11rem, var(--rail))
+          minmax(0, var(--main))
+          var(--page-pad);
+        column-gap: 2rem;
+      }
+      .header-main {
+        grid-column: 3;
+      }
+      .header-rule {
+        grid-column: 1 / -1;
+      }
+      .toc-rail {
+        grid-column: 2;
+      }
+      main {
+        grid-column: 3;
+      }
+      .notes-gutter {
+        display: none;
+      }
       .fullwidth,
       .iframe-wrapper { width: 100%; }
       .sidenote,
@@ -348,38 +406,64 @@
         display: block;
       }
     }
+
+    @media (max-width: 980px) {
+      article.page {
+        padding: 2rem var(--page-pad) 5rem;
+      }
+      .page-grid,
+      .layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .header-main,
+      .header-rule,
+      .toc-rail,
+      main,
+      .notes-gutter {
+        grid-column: 1;
+      }
+      .toc-rail {
+        position: static;
+        justify-self: stretch;
+        max-width: none;
+        order: -1;
+      }
+      .notes-gutter {
+        display: none;
+      }
+      .fullwidth,
+      .iframe-wrapper { width: 100%; }
+    }
   </style>
 </head>
 <body>
   <article class="page">
-    <header>
-      <h1>{{TITLE}}</h1>
-      {{SUBTITLE_BLOCK}}
-      {{META_BLOCK}}
+    <header class="page-grid header-grid">
+      <div class="header-main">
+        <h1>{{TITLE}}</h1>
+        {{SUBTITLE_BLOCK}}
+        {{META_BLOCK}}
+      </div>
+      <div class="header-rule" aria-hidden="true"></div>
     </header>
 
-    <div class="layout">
+    <div class="page-grid layout">
+      <aside class="toc-rail" aria-label="Document contents">
+        {{TOC_BLOCK}}
+      </aside>
+
       <main>
         <div class="body-html">
           {{BODY_HTML}}
         </div>
       </main>
 
-      <aside aria-label="Document navigation and notes">
-        {{TOC_BLOCK}}
-        {{RAIL_NOTES_BLOCK}}
-      </aside>
+      <div class="notes-gutter" aria-hidden="true"></div>
     </div>
   </article>
 
   <script>
-    const layout = document.querySelector(".layout");
-    const rail = document.querySelector("aside");
-    if (layout && rail && rail.children.length === 0 && !rail.textContent.trim()) {
-      rail.hidden = true;
-      layout.classList.add("no-rail");
-    }
-
     document.querySelectorAll("[data-copy-target]").forEach((btn) => {
       btn.addEventListener("click", async () => {
         const el = document.getElementById(btn.dataset.copyTarget);

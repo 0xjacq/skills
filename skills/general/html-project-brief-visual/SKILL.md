@@ -1,6 +1,6 @@
 ---
 name: "html-project-brief-visual"
-description: "Create or refresh a self-contained HTML project brief that explains a repo through repo-derived system maps, main-flow diagrams, and complementary generated product and technical explainer visuals for mixed product and engineering audiences."
+description: "Create or refresh a visual-first self-contained HTML project brief with generated imagery, editorial storytelling, and precise HTML or SVG overlays. Use when the user wants an onboarding or architecture brief that should feel more image-led than the standard html-project-brief."
 argument-hint: "[optional brief request]"
 disable-model-invocation: true
 user-invocable: true
@@ -8,11 +8,11 @@ user-invocable: true
 
 # HTML Project Brief Visual
 
-Create a single self-contained HTML artifact that helps a human understand a project quickly through structure-first visual explanation.
+Create a single self-contained HTML artifact that helps a human understand a project quickly through visual storytelling.
 
 Treat the output as a living comprehension surface, not as a website, dashboard, or product UI.
 
-This skill is the architecture-first sibling of `html-project-brief`. It should coexist with the standard brief, not overwrite it by default.
+This skill is the visual-first sibling of `html-project-brief`. It should coexist with the standard brief, not overwrite it by default.
 
 ## Core contract
 
@@ -24,7 +24,7 @@ Keep the artifact:
 - readable on desktop and mobile
 - source-grounded
 - optimized for fast scanning first and deeper reading second
-- more visually structured than the standard brief without becoming decorative
+- more visual than the standard brief without becoming decorative
 
 Use inline CSS and only lightweight JavaScript.
 
@@ -43,24 +43,9 @@ Choose one dominant mode before drafting structure:
 
 This skill is optimized first for `onboarding` and `architecture`.
 
-Support the other modes, but keep `imagegen` secondary unless a generated visual materially improves understanding.
+Support the other modes, but use a lighter visual budget for them unless the user explicitly asks for a richer treatment.
 
 Read [references/mode-recipes.md](references/mode-recipes.md) when the mode choice materially affects the page shape.
-
-## Functional contract
-
-For a normal zero-prompt brief, always produce:
-
-- 1 repo-derived system map showing modules, layers, or responsibilities
-- 1 repo-derived main flow showing a key data or control path
-
-These two views are mandatory.
-
-Generated images are not mandatory architecture artifacts. They are optional explanation assets that should help a developer, product engineer, or product manager understand the product or tool faster.
-
-Do not use `imagegen` to invent the system structure.
-
-For `onboarding` and `architecture`, assume a mixed PM plus dev audience unless the user says otherwise.
 
 ## Answer the comprehension questions first
 
@@ -76,50 +61,21 @@ Design the page to answer most of these quickly:
 - What should I read next?
 - What is still risky or uncertain?
 
-Do not start by styling. Start by extracting the structure that the page must explain.
+Do not start by styling. Start by deciding what a human needs to understand and which visuals will teach that fastest.
 
-## Structure first, visuals second
+## Visual-first default
 
-Use this sequence:
+Generated imagery is expected in this skill, but within a disciplined budget.
 
-1. inspect the repo
-2. identify modules, entrypoints, and responsibilities
-3. derive the system map
-4. derive the main flow
-5. decide whether the default complementary PM plus dev visual pair is warranted, or whether a truthful single-image variant is better
+Default image budget for a normal zero-prompt brief:
+- 1 cover or hero image for project purpose
+- 1 system mental-model illustration near the overview
+- 1 architecture or key-flow visual near the main technical explanation
+- 1 optional fourth visual for usage, risks, or read-next when the repo supports it
 
-Never reverse this order.
+For non-primary modes, use 1 to 2 visuals unless the user asks for a richer brief.
 
-If the diagrams are weak, adding imagery will not fix the brief.
-
-## Visual budget
-
-Default generated image budget for a normal zero-prompt brief:
-
-- 2 complementary generated explainer visuals by default for `onboarding` and `architecture`
-- 1 generated explainer visual only when the audience is clearly narrower than mixed PM plus dev, or when the repo is too thin to support a truthful second visual
-
-Do not exceed 2 generated images unless the user explicitly asks for a more image-heavy artifact.
-
-The default complementary pair should be:
-
-- a one-glance operating picture that helps a reader grasp the product, user surfaces, core pipeline, and backend edges in one frame
-- a one-glance technical operating picture that helps a reader grasp runtime boundaries, shared ownership, service clusters, persistence edges, and integration handoffs in one frame
-
-The first generated visual should not be abstract decoration.
-
-When the brief needs to serve both product and engineering audiences:
-
-- let the first image explain the product or tool in one glance
-- let the second image explain the technical operating model in one glance
-- do not let the second image merely redraw the first with denser labels
-
-The pair must answer different questions:
-
-- product operating picture: what the tool is, what surfaces users touch, what the core loop does, and where the main edges sit
-- technical operating picture: where the code lives, what runtime boundaries exist, which layers own behavior, and where storage, routing, or sync handoffs occur
-
-The hero is optional and compact. If it does not add useful context, omit it and start the page with the system map.
+Prefer fewer strong visuals over many weak ones.
 
 Read [references/visual-guidelines.md](references/visual-guidelines.md) before finalizing layout or captions.
 
@@ -133,40 +89,35 @@ Always:
 - identify the source of claims when possible
 - say when context is partial
 - keep technical labels and exact callouts in HTML or SVG
-- keep the structure diagram repo-derived
-- pair every generated image with a caption, provenance note, and pedagogical thesis
+- pair every generated image with a caption and provenance note
 
-The pedagogical thesis should state exactly what the image helps the reader understand.
+Use provenance language such as:
+- `Conceptual visual` for a mental-model scene
+- `Source-grounded composite` for a visual derived from repo facts
+- `Interpretive summary` for a scene that synthesizes multiple facts
 
-If you cannot state that clearly in one sentence, skip the image.
+Do not let a generated image imply precision it does not have.
 
 ## Use images and diagrams for different jobs
+
+Use generated raster visuals for:
+- project purpose and atmosphere
+- mental-model scenes
+- memorable onboarding anchors
+- section openers for long explainers
+- architecture mood boards that help a reader form the right mental picture
 
 Use HTML and SVG for:
 - topology diagrams
 - sequence diagrams
 - exact request or data flows
-- module maps
-- boundaries and interfaces
 - code annotation
 - tables
 - legends
 - comparison matrices
+- any precise labels or callouts
 
-Use generated raster visuals for:
-- a one-glance product operating picture
-- a one-glance technical operating picture
-- a source-informed backdrop behind a system map
-- a subsystem vignette that gives shape to a section
-- a flow-support image that reinforces the adjacent sequence or path
-- a compact context visual when the project domain is hard to picture from text alone
-
-Generated images must either:
-
-- help the reader understand the product or tool in one glance
-- improve the readability of an existing diagram
-
-If they do neither, skip them.
+Generated images should usually be text-free. Keep labels, legends, arrows, and technical naming outside the image in the artifact.
 
 ## Use `imagegen` deliberately
 
@@ -175,27 +126,23 @@ Use the `imagegen` skill for raster generation when it is available.
 Image generation policy:
 - use the built-in `image_gen` path by default
 - do not switch to CLI fallback unless the user explicitly asks for it or the `imagegen` skill requires explicit confirmation for a fallback path
-- keep prompts source-informed, restrained, and overlay-friendly
-- allow a small amount of large, high-value text when it materially improves one-glance comprehension
-- do not ask for metaphorical, imaginary, or purely atmospheric architecture scenes
+- keep prompts educational, editorial, and label-friendly
+- avoid embedded text unless a small amount of high-level display text is truly necessary
 
 Read [references/prompt-recipes.md](references/prompt-recipes.md) before drafting prompts.
 
 When prompting visuals for this skill, bias toward:
-- stable composition
-- clear layer separation
-- quiet backgrounds
-- recognizable product surfaces or system stages
-- zones that match the adjacent diagram
-- visual choices that stay aligned with known repo facts
+- editorial explainer composition
+- restrained palette
+- clean negative space for HTML overlays
+- calm, credible mood
+- visual specificity that matches known repo facts
 
 Avoid:
-- architecture mood boards
-- conceptual mental-model scenes
-- cinematic spectacle
+- cinematic spectacle for its own sake
+- generic dashboard art
 - decorative collage clutter
-- abstract block art with no product meaning
-- fake architecture implied by unexplained imagery
+- images that try to encode exact architecture without HTML or SVG help
 
 ## Build the right page shape
 
@@ -204,20 +151,21 @@ A strong default page usually includes:
 - title
 - one-sentence purpose
 - short summary deck
-- overview
-- system map
-- main flow
+- hero visual with provenance
+- overview and project map
+- system mental-model figure
 - key files or modules
-- usage or navigation guidance
+- architecture or flow section with HTML or SVG overlays
+- how to run or use it
 - risks or open questions
 - suggested next reading
 
-Optional additions:
-- one-glance operating picture
-- one-glance technical operating picture
-- compact hero or context visual
-- one support visual beside the system map
-- one support visual beside a subsystem or flow section
+Desktop body composition should default to:
+- a compact contents gutter on the left
+- a centered reading column in the middle
+- a reserved right-side context gutter for sources, read-next, or secondary context
+
+The hero can remain more editorial and asymmetrical than the body. Do not let hero composition dictate the centering of the main reading column.
 
 Keep interactivity light.
 
@@ -232,45 +180,37 @@ Do not turn the brief into an editor, simulator, or workflow app.
 
 ## Default template
 
-Use the architecture-first visual template in [assets/editorial-visual-brief.html](assets/editorial-visual-brief.html) unless the repository already has a stronger visual language that should be preserved.
+Use the editorial visual template in [assets/editorial-visual-brief.html](assets/editorial-visual-brief.html) unless the repository already has a stronger visual language that should be preserved.
 
 The default visual language should feel:
-- clear
-- structured
-- restrained
-- diagram-led
+- editorial
+- image-led
+- restrained rather than flashy
 - readable on mobile
+- precise where it needs to be
 
-The page should read as:
+The default body layout should feel centered and balanced:
+- `On This Page` lives on the left on desktop
+- the reading column stays centered even if right-side context is sparse
+- the right gutter stays visually discreet when lightly populated
 
-- `overview`
-- `operating picture` for mixed PM plus dev audiences
-- `technical operating picture` for mixed PM plus dev audiences
-- `system map`
-- `main flow`
-- `key areas`
-- `usage`
-- `risks`
-
-Do not let the hero or support imagery outrank the diagrams.
+Do not fall back to the standard Tufte template unless the user explicitly wants the standard brief instead.
 
 ## Follow this workflow
 
 1. Determine the dominant mode.
 2. Read only the files and artifacts relevant to that mode.
 3. Identify the core comprehension questions.
-4. Extract repo facts: entrypoints, key modules, ownership boundaries, and main path.
-5. Build the system map in HTML or SVG.
-6. Build the main flow in HTML or SVG.
-7. Unless the user or repo strongly indicates otherwise, assume a mixed PM plus dev audience for `onboarding` or `architecture`.
-8. Generate a one-glance operating picture for product understanding.
-9. Generate a one-glance technical operating picture for engineering understanding.
-10. Generate only the visuals that have a clear pedagogical thesis.
-11. Place the operating picture before the system map, and place the technical operating picture immediately before the system map or main flow.
-12. Caption every visual with what it shows, why it exists, and how grounded it is.
-13. Keep the file self-contained.
-14. Check desktop and mobile readability.
-15. Verify that the artifact is easier to understand than the source material.
+4. Choose the minimum source set that can answer those questions credibly.
+5. Decide the story arc before styling: title, summary, system picture, proof, usage, risks, read next.
+6. Plan the visual budget. Default to 3 anchors, add the fourth only when it teaches something distinct.
+7. Generate the raster visuals with `imagegen`.
+8. Build the precise diagrams, labels, legends, and annotations in HTML or SVG.
+9. Embed the final selected images directly into the HTML artifact.
+10. Caption every visual with what it shows, why it exists, and how grounded it is.
+11. Keep the file self-contained.
+12. Check desktop and mobile readability, confirming that the body copy remains centered independently of side content density.
+13. Verify that the artifact is easier to understand than the source material.
 
 ## Zero-prompt behavior
 
@@ -295,17 +235,15 @@ If `project-brief-visual.html` does not exist, enter bootstrap mode.
 In bootstrap mode:
 - create the first baseline visual brief
 - default to an `onboarding`-led structure
-- include `architecture` and `usage` sections when the repo supports them
+- blend in `architecture` and `usage` sections when the repo supports them
 - include `recent changes` only as a secondary section
-- always produce a system map plus a main flow
-- default to the complementary PM plus dev visual pair for `onboarding` or `architecture`
-- collapse to 1 generated explainer visual only when a second image would be repetitive or weak
+- use the default 3-image set unless a fourth image clearly helps
 
 Prioritize these questions:
 - what is this project
 - why does it exist
 - how is it organized
-- how does the main path work
+- how does it work
 - how do I use or navigate it
 - what should I read next
 
@@ -316,8 +254,8 @@ If `project-brief-visual.html` already exists, enter refresh mode.
 In refresh mode:
 - treat the existing visual brief as a maintained artifact
 - update it rather than replacing it blindly
-- preserve still-accurate structure and diagrams when they remain useful
-- replace support visuals when the diagram, emphasis, or explanation has changed
+- preserve still-accurate framing and selected visuals when they remain useful
+- replace or revise visuals when the underlying explanation or emphasis has changed
 - increase emphasis on changes since the last pass
 
 In refresh mode, read:
@@ -332,31 +270,31 @@ Use current code and docs as the source of truth when they conflict with the exi
 ## Mode-specific defaults
 
 For `onboarding`:
-- always show a simple system map plus one end-to-end flow
-- keep the diagrams approachable
-- default to a complementary pair: one operating picture plus one technical operating picture
-- collapse to a single visual only when the audience is clearly non-technical or the repo does not support a truthful technical picture
+- use the full default visual budget
+- make the hero image and mental-model figure do real teaching work
+- keep the architecture section approachable and label-rich
 
 For `architecture`:
-- always show boundaries, responsibilities, integrations, and the main path
-- keep the hero absent or very restrained
+- bias the main visual toward subsystem boundaries or control flow
+- keep the hero more restrained
 - let HTML or SVG carry exact boundaries, invariants, and interfaces
-- default to a complementary pair when the audience includes both product and engineering readers
-- keep the technical operating picture closer to the system map than the product operating picture
 
 For `usage`, `code-explainer`, `change-brief`, and `research-brief`:
-- keep the system map and flow only when they are relevant to the brief goal
-- limit `imagegen` to a secondary role
-- prefer structure, evidence, and annotation over atmosphere
+- reduce the image count unless the user asks for a richer narrative
+- prioritize a smaller number of high-signal visuals and stronger source grounding
 
-## Ambiguous repos
+## Prefer clarity over coverage
 
-If the repo is ambiguous, incomplete, or documentation-light:
-- derive a responsibility map from the strongest available evidence, such as folders, entrypoints, config, and package files
-- choose the most demonstrable main flow from code, docs, or commands
-- clearly label where the flow is inferred rather than directly documented
+Do not mirror every source file or every section of a long document.
 
-Do not invent architecture just to make the page look complete.
+Compress aggressively:
+- group related files by responsibility
+- summarize repetitive patterns
+- caption only the visuals that genuinely teach
+- keep overlays short and legible
+- use figures to clarify rather than to decorate
+
+The goal is not completeness. The goal is transfer of understanding.
 
 ## Use bundled references progressively
 
@@ -372,9 +310,10 @@ Do not load every reference by default.
 ## Aim for this standard
 
 A good artifact produced with this skill should:
-- explain architecture before atmosphere
-- make the main path obvious
-- make the product legible in one visual and the implementation shape legible in a second visual when the audience is mixed PM plus dev
-- use images only when they teach
-- keep diagrams repo-derived
+- be easier to read than the source material
+- feel more vivid than the standard brief without losing trust
+- make onboarding faster
+- give architecture enough visual shape to be memorable
+- keep precise explanation in HTML and SVG rather than in generated text inside images
+- keep the main reading column visually centered on desktop even when the right gutter is sparse
 - remain useful when refreshed later

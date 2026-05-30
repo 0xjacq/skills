@@ -66,19 +66,18 @@ The template is intentionally generic. Populate or remove these placeholders cle
 - `{{META_BLOCK}}`
 - `{{TOC_BLOCK}}`
 - `{{BODY_HTML}}`
-- `{{RAIL_NOTES_BLOCK}}`
 
 Do not leave empty wrappers or unresolved placeholder text in the final output.
+Do not create a separate notes rail; Tufte notes belong inside `{{BODY_HTML}}` as `sidenote` or `marginnote` markup.
 
 Recommended block shapes:
 - `{{SUBTITLE_BLOCK}}` -> `<p class="subtitle">...</p>`
 - `{{META_BLOCK}}` -> `<p class="meta">...</p>`
 - `{{TOC_BLOCK}}` -> `<section><strong>Contents</strong><nav>...</nav></section>`
-- `{{RAIL_NOTES_BLOCK}}` -> `<section><strong>Notes</strong>...</section>`
 
-If both rail blocks are empty, remove the rail entirely.
+If the TOC is empty, remove its visible inner wrapper and leave the structural left gutter quiet rather than inventing a replacement block.
 
-When adding renderer-specific wrappers such as table overflow containers, code block wrappers, or note containers, inherit the brief template's spacing, rail treatment, and quiet control styling before introducing new visual behavior.
+When adding renderer-specific wrappers such as table overflow containers, code block wrappers, or note containers, inherit the brief template's spacing, gutter treatment, and quiet control styling before introducing new visual behavior.
 
 Supported source-side utility vocabulary:
 - `span.newthought`
@@ -160,7 +159,7 @@ Disallowed unless the source document explicitly requires them:
 - product-style UI chrome
 
 The page must remain understandable with all controls untouched.
-Core note behavior must not depend on JavaScript. JavaScript may only enhance non-essential controls such as copy buttons or rail cleanup.
+Core note behavior must not depend on JavaScript. JavaScript may only enhance non-essential controls such as copy buttons or TOC wrapper cleanup.
 
 ## Visual rules
 
@@ -171,15 +170,22 @@ Use the `html-project-brief` house style from the template:
 - near-black text
 - narrow reading measure
 - quiet borders and muted accents
-- margin space for secondary context only
+- a left TOC gutter and a right note gutter around a reading column centered by the viewport
 
 Preserve shared house primitives wherever possible:
 - `--main: 38rem`
-- `--rail: 18rem`
+- balanced side gutters around the reading column on desktop
+- a fluid full-width grid rather than a capped page block on large screens
 - `line-height: 1.55`
 - the brief template's heading rhythm
-- the brief template's rail and nav styling
+- the brief template's nav styling and quiet gutter treatment
 - the brief template's code, table, figcaption, and callout treatment
+
+Desktop composition rules:
+- the reading column is the visual center of the page
+- the TOC belongs in a true left gutter, not tucked against the prose column
+- the right gutter may be visually quiet when it has no visible note content, but it must not change the centering of `main`
+- the header title, subtitle, and metadata align to the same reading column as the body
 
 Do not add bright hero treatments, decorative gradients, or card-grid dashboard patterns.
 Do not invent alternate typography, spacing, or control systems when the brief template already provides a suitable primitive.
@@ -187,7 +193,7 @@ Do not invent alternate typography, spacing, or control systems when the brief t
 Intentional divergences from canonical Tufte CSS:
 - preserve the warm sepia/chocolate palette instead of the neutral default
 - keep the local serif and sans fallback stacks instead of vendoring ET Book and Gill Sans
-- keep the TOC rail as a repo-specific extension
+- keep the TOC rail as a repo-specific extension on the left while reserving the right gutter for Tufte notes
 
 ## Rendering workflow
 
@@ -199,7 +205,7 @@ Intentional divergences from canonical Tufte CSS:
 6. Preserve explicit source-signaled margin notes and supported Tufte utility classes.
 7. Build a table of contents from meaningful headings.
 8. Wrap wide tables, figures, iframe media, and code blocks only when needed for readability.
-9. Populate the template and remove unused optional blocks.
+9. Populate the template so the TOC lives in the left gutter and all notes stay inside `{{BODY_HTML}}`.
 10. Verify the output is self-contained and preserves the source's information content.
 
 ## Acceptance standard
@@ -211,4 +217,6 @@ A good result produced with this skill should:
 - take advantage of HTML where markdown is visually limited
 - read as the same house theme as `html-project-brief`
 - behave like a hybrid Tufte CSS article, especially for notes and section structure
+- keep the reading column centered even when TOC density or note density changes
+- avoid large dead space to the left of the TOC on wide desktop viewports
 - remain faithful enough that a reader can trust nothing important was omitted

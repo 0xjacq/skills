@@ -15,9 +15,10 @@
       --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
       --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      --max: 72rem;
-      --main: 38rem;
-      --rail: 18rem;
+      --max: 88rem;
+      --toc: 13rem;
+      --main: 46rem;
+      --context: 16rem;
     }
 
     * { box-sizing: border-box; }
@@ -27,19 +28,19 @@
       background: var(--bg);
       color: var(--fg);
       font-family: var(--serif);
-      line-height: 1.55;
+      line-height: 1.62;
     }
 
     .page {
       max-width: var(--max);
       margin: 0 auto;
-      padding: 2rem 1.25rem 5rem;
+      padding: 2.25rem 1.5rem 5.5rem;
     }
 
     header {
       border-bottom: 1px solid var(--line);
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.25rem;
     }
 
     .eyebrow, .meta, nav, .tabs, .pill {
@@ -52,9 +53,9 @@
       margin: 0 0 0.75rem;
     }
 
-    h1 { font-size: 2.3rem; }
-    h2 { font-size: 1.45rem; margin-top: 2.5rem; }
-    h3 { font-size: 1.1rem; margin-top: 1.5rem; }
+    h1 { font-size: 2.45rem; }
+    h2 { font-size: 1.5rem; margin-top: 2.9rem; }
+    h3 { font-size: 1.1rem; margin-top: 1.7rem; }
 
     .subtitle, .meta {
       color: var(--muted);
@@ -78,47 +79,70 @@
 
     .layout {
       display: grid;
-      grid-template-columns: minmax(0, var(--main)) minmax(0, var(--rail));
-      gap: 2rem;
+      grid-template-columns: minmax(11rem, var(--toc)) minmax(0, var(--main)) minmax(0, var(--context));
+      gap: 2.75rem;
       align-items: start;
+      justify-content: center;
+    }
+
+    .layout.no-context {
+      grid-template-columns: minmax(11rem, var(--toc)) minmax(0, var(--main));
     }
 
     main { min-width: 0; }
-    aside {
+    .toc-rail {
       position: sticky;
-      top: 1rem;
-      font-size: 0.95rem;
+      top: 1.25rem;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      align-self: start;
       color: var(--muted);
     }
 
-    aside section {
+    .context-rail {
+      font-size: 0.95rem;
+      line-height: 1.52;
+      align-self: start;
+      color: var(--muted);
+    }
+
+    .toc-rail section,
+    .context-rail section {
+      margin-bottom: 1.5rem;
+    }
+
+    .toc-rail section {
       border-left: 2px solid var(--line);
       padding-left: 0.9rem;
-      margin-bottom: 1.5rem;
+    }
+
+    .context-rail section {
+      border-left: 1px solid var(--line);
+      padding-left: 1rem;
     }
 
     nav a {
       color: inherit;
       text-decoration: none;
       display: block;
-      padding: 0.15rem 0;
+      padding: 0.18rem 0;
     }
 
     nav a:hover { color: var(--accent); }
 
     p, ul, ol, pre, table, figure {
-      margin: 0 0 1rem;
+      margin: 0 0 1.2rem;
     }
 
     ul, ol {
-      padding-left: 1.25rem;
+      padding-left: 1.35rem;
     }
 
     .callout {
       border: 1px solid var(--line);
       background: #fffdfa;
-      padding: 0.85rem 1rem;
-      margin: 1rem 0;
+      padding: 0.9rem 1rem;
+      margin: 1.15rem 0;
     }
 
     .callout.warn {
@@ -126,9 +150,13 @@
       background: var(--accent-soft);
     }
 
+    .callout.subtle {
+      background: #fcfbf7;
+    }
+
     .figure-wide {
-      margin: 1.5rem 0;
-      padding: 1rem;
+      margin: 1.9rem 0;
+      padding: 1rem 1.05rem;
       border: 1px solid var(--line);
       background: #fffdfa;
     }
@@ -196,17 +224,53 @@
       float: right;
     }
 
-    .marginnote {
+    .marginnote,
+    .inline-note {
       color: var(--muted);
       font-size: 0.92rem;
       border-left: 2px solid var(--line);
       padding-left: 0.75rem;
-      margin: 0.75rem 0;
+      margin: 0.95rem 0 0;
+    }
+
+    @media (max-width: 1279px) {
+      .layout {
+        grid-template-columns: minmax(11rem, var(--toc)) minmax(0, var(--main));
+        grid-template-areas:
+          "toc main"
+          ". context";
+      }
+
+      .layout.no-context {
+        grid-template-areas: "toc main";
+      }
+
+      .toc-rail { grid-area: toc; }
+      main { grid-area: main; }
+      .context-rail { grid-area: context; }
     }
 
     @media (max-width: 980px) {
-      .layout { grid-template-columns: 1fr; }
-      aside { position: static; order: -1; }
+      .layout,
+      .layout.no-context {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "toc"
+          "main"
+          "context";
+        gap: 1.5rem;
+      }
+
+      .toc-rail {
+        position: static;
+      }
+
+      .context-rail section {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+        padding-left: 0;
+        padding-top: 0.9rem;
+      }
     }
   </style>
 </head>
@@ -225,6 +289,10 @@
     </header>
 
     <div class="layout">
+      <aside class="toc-rail" aria-label="Document contents">
+        {{LEFT_TOC_BLOCK}}
+      </aside>
+
       <main>
         <section id="overview">
           <h2>Overview</h2>
@@ -272,7 +340,7 @@
           <h2>Annotated Snippet</h2>
           <button class="copy-btn" data-copy-target="snippet-code">Copy</button>
           <pre id="snippet-code"><code>{{CODE_SNIPPET}}</code></pre>
-          <div class="marginnote">{{SNIPPET_NOTE}}</div>
+          <div class="inline-note">{{SNIPPET_NOTE}}</div>
         </section>
 
         <section id="next">
@@ -285,23 +353,8 @@
         </section>
       </main>
 
-      <aside>
-        <section>
-          <strong>Contents</strong>
-          <nav>
-            <a href="#overview">Overview</a>
-            <a href="#map">System Map</a>
-            <a href="#details">Key Areas</a>
-            <a href="#snippet">Annotated Snippet</a>
-            <a href="#next">Read Next</a>
-          </nav>
-        </section>
-
-        <section>
-          <strong>Notes</strong>
-          <p>{{SIDE_NOTE_1}}</p>
-          <p>{{SIDE_NOTE_2}}</p>
-        </section>
+      <aside class="context-rail" aria-label="Secondary context">
+        {{RIGHT_CONTEXT_BLOCK}}
       </aside>
     </div>
   </div>
@@ -317,6 +370,13 @@
         panels.forEach((p) => p.classList.toggle("active", p.dataset.panel === target));
       });
     });
+
+    const layout = document.querySelector(".layout");
+    const contextRail = document.querySelector(".context-rail");
+    if (layout && contextRail && !contextRail.textContent.trim()) {
+      contextRail.hidden = true;
+      layout.classList.add("no-context");
+    }
 
     document.querySelectorAll("[data-copy-target]").forEach((btn) => {
       btn.addEventListener("click", async () => {

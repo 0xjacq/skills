@@ -9,7 +9,7 @@ This theme is Tufte-inspired, not a strict copy.
 - optimize for reading
 - keep signal high and noise low
 - place figures near the text they explain
-- use margin space for secondary context
+- use side rails sparingly and only when they clarify the reading flow
 - keep the page credible and calm
 
 ## Typography
@@ -32,21 +32,28 @@ This theme is Tufte-inspired, not a strict copy.
 ## Layout
 
 - Use one main reading column.
-- Use a right margin rail for notes, provenance, and "read next" hints on wide screens.
+- Use a compact left contents rail on wide screens.
+- Use a right context rail only when there are real notes, provenance, or "read next" hints worth surfacing.
+- Keep the navigation rail visually subordinate. It should not exceed roughly 15% of the useful page width.
 - Use full-width sections only for:
   - architecture diagrams
   - timelines
   - large comparison tables
   - diff overviews
-- Collapse margin content into inline callouts or toggles on narrow screens.
+- On medium screens, keep the contents rail and move the context rail below the main column when needed.
+- On narrow screens, collapse the layout to one column in this order:
+  1. contents
+  2. main content
+  3. context
+- Collapse context-rail content into inline callouts or toggles on narrow screens.
 
 ## Components
 
 Preferred components:
 - summary deck with 2 to 4 key facts
-- sticky table of contents
+- sticky table of contents in the left rail
 - figure with caption
-- margin note
+- inline note or contextual right-rail note
 - callout for caveat or invariant
 - code excerpt with short annotation
 - change badge

@@ -1,9 +1,6 @@
 ---
-name: "html-project-brief"
-description: "Create or refresh a self-contained HTML project brief for humans. Use when the user explicitly wants an onboarding, architecture, usage, change, or research brief, not a product UI or app feature."
-argument-hint: "[optional brief request]"
-disable-model-invocation: true
-user-invocable: true
+name: html-project-brief
+description: Use when Codex needs to generate a readable, shareable HTML artifact from codebases, markdown docs, technical plans, diffs, research notes, or structured project data so a human can quickly understand what a project does, how it works, what changed, and what to read next.
 ---
 
 # HTML Project Brief
@@ -68,7 +65,8 @@ The default theme is Tufte-inspired, not a strict clone. Favor:
 - strong typography
 - restrained color
 - simple heading hierarchy
-- margin notes or sidenotes
+- a compact contents rail on the left
+- an optional right context rail only when secondary material materially helps
 - close integration of prose and figures
 - quiet UI controls
 - wide figures only when the content needs width
@@ -135,9 +133,9 @@ For a `research-brief`, include:
 
 ## Use margin content carefully
 
-Use margin notes, sidenotes, or equivalent inline callouts for secondary material only.
+Use the left contents rail for navigation only. Put secondary material in an optional right context rail, inline notes, or equivalent collapsible callouts only when it improves understanding.
 
-Good margin content:
+Good secondary context:
 - definitions
 - caveats
 - provenance
@@ -146,9 +144,13 @@ Good margin content:
 - agent notes
 - "read this next" references
 
-Do not hide critical content in the margin.
+Do not hide critical content in the side rails.
 
-On small screens, collapse margin content into toggles or inline callouts so the artifact remains readable.
+The contents rail should stay compact and utilitarian. It must not visually compete with the main reading column.
+
+Use a right context rail only when it adds real comprehension value. If it is empty or low-value, collapse that material into inline callouts or omit it.
+
+On small screens, collapse side-rail content into inline callouts or toggles so the artifact remains readable.
 
 ## Visualize what benefits from structure
 
@@ -219,7 +221,7 @@ If available, read [references/imagegen-usage.md](references/imagegen-usage.md) 
 5. Draft the visual hierarchy before writing long prose.
 6. Use the default Tufte-inspired theme unless the repo's design language should be preserved.
 7. Place figures near the text they explain.
-8. Put secondary material in the margin or collapsible callouts.
+8. Put navigation in the left contents rail, and put secondary material in the optional right context rail, inline notes, or collapsible callouts.
 9. Add only the minimum interactivity needed for understanding.
 10. Add optional raster visuals only if they teach better than text or SVG alone.
 11. Keep the file self-contained.
@@ -299,7 +301,7 @@ Use a small high-signal source set first:
 For zero-prompt invocation:
 - produce exactly one self-contained HTML artifact by default
 - keep the first pass compact and high-signal
-- include a short `recent changes` section even in bootstrap mode if active local work is present
+- include a short "recent changes" section even in bootstrap mode if active local work is present
 - include update metadata in refresh mode when helpful, such as last updated time or refreshed sections
 
 If the repo is very small, ambiguous, or documentation-first, produce a minimal but useful brief rather than asking for clarification unless a real blocker exists.
