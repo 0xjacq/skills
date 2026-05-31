@@ -1,0 +1,6 @@
+interface:
+  display_name: "Txt To HTML SRS"
+  short_description: "Turn source text into a Tufte-style study sheet with flashcards and optional hub publishing."
+
+policy:
+  allow_implicit_invocation: true

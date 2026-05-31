@@ -1,6 +1,9 @@
 ---
-name: html-project-brief
-description: Use when Codex needs to generate a readable, shareable HTML artifact from codebases, markdown docs, technical plans, diffs, research notes, or structured project data so a human can quickly understand what a project does, how it works, what changed, and what to read next.
+name: "html-project-brief"
+description: "Use when Codex needs to generate a readable, shareable HTML artifact from codebases, markdown docs, technical plans, diffs, research notes, or structured project data so a human can quickly understand what a project does, how it works, what changed, and what to read next."
+argument-hint: "[optional brief request]"
+disable-model-invocation: true
+user-invocable: true
 ---
 
 # HTML Project Brief
