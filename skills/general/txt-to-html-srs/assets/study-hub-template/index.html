@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Study Hub</title>
+  <style>
+    :root {
+      --bg: #f8f3ea;
+      --fg: #17120e;
+      --muted: #62564a;
+      --line: #d2c3b1;
+      --accent: #7b4a2d;
+      --accent-soft: #e6d7c5;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --max: 78rem;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--serif);
+      line-height: 1.55;
+    }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2rem 1.25rem 5rem;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+    }
+
+    .eyebrow,
+    .meta,
+    code {
+      font-family: var(--sans);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      font-weight: 500;
+      line-height: 1.1;
+      margin: 0 0 0.75rem;
+    }
+
+    h1 { font-size: 2.5rem; }
+
+    .meta { color: var(--muted); }
+
+    .empty-state {
+      border: 1px dashed var(--line);
+      padding: 1.25rem;
+      background: rgba(255, 255, 255, 0.42);
+    }
+
+    code {
+      background: #eee3d4;
+      border: 1px solid #dccab5;
+      border-radius: 0.2rem;
+      padding: 0.08rem 0.28rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <p class="eyebrow">Private Study Hub</p>
+      <h1>Study Hub</h1>
+      <p class="meta">This template is ready for <code>publish_to_hub.py</code> to manage <code>index.html</code> and <code>library/catalog.json</code>.</p>
+    </header>
+    <main>
+      <section class="empty-state">
+        <h2>No study sheets yet</h2>
+        <p>Publish the first sheet from <code>txt-to-html-srs</code> to populate this library.</p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

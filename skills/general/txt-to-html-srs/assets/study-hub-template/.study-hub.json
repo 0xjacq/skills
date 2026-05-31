@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "hub_title": "Study Hub",
+  "library_dir": "library",
+  "catalog_path": "library/catalog.json",
+  "index_path": "index.html"
+}
