@@ -1,0 +1,6 @@
+interface:
+  display_name: "YouTube To HTML"
+  short_description: "Transcribe one YouTube video into markdown and synthesize a self-contained HTML brief."
+
+policy:
+  allow_implicit_invocation: false

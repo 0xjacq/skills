@@ -11,7 +11,7 @@ Each skill keeps reusable workflow instructions in `SKILL.md`, pushes heavy refe
 | Category | Skills | Description |
 |----------|--------|-------------|
 | [`agenpedia`](./skills/agenpedia/) | `ingest`, `ingest-youtube`, `ingest-batch`, `query`, `lint` | Markdown wiki knowledge base workflows |
-| [`general`](./skills/general/) | `grill-me`, `grill-me-light`, `html-project-brief`, `html-project-brief-visual` | Cross-project planning, design review, and HTML project briefing |
+| [`general`](./skills/general/) | `grill-me`, `grill-me-light`, `html-project-brief`, `html-project-brief-visual`, `markdown-to-tufte-html`, `txt-to-html-srs`, `ytb-to-html` | Cross-project planning, design review, and HTML-based artifact generation |
 | [`tools`](./skills/tools/) | `build-or-not`, `find-tools` | Tooling and pre-build diligence orchestration skills |
 
 ## Install
@@ -60,6 +60,9 @@ Reusable skills that are not tied to a specific product or schema.
 | `grill-me-light` | Run a short, high-leverage stress-test of a plan or design |
 | `html-project-brief` | Turn repos, docs, and diffs into self-contained HTML project briefings |
 | `html-project-brief-visual` | Turn repos, docs, and diffs into visual-first self-contained HTML project briefings |
+| `markdown-to-tufte-html` | Render markdown into a self-contained Tufte-style HTML document without rewriting it |
+| `txt-to-html-srs` | Turn source text into a Tufte-style study sheet with flashcards and optional publishing |
+| `ytb-to-html` | Transcribe one YouTube video into markdown and synthesize a self-contained HTML brief |
 
 ## Tools Skills
 
