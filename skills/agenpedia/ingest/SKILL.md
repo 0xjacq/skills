@@ -41,6 +41,32 @@ references images, view them separately via vision for additional
 context. Download any referenced images locally to `raw/assets/` — do
 not rely on external URLs that may break.
 
+## Step 2b: Assess Source Density and Compression Strategy
+
+Decide how aggressively to compress before drafting the main page.
+Check whether the source shows:
+
+- low repetition
+- a high ratio of mechanisms, arguments, or frameworks to filler
+- many reusable lists, checklists, matrices, or distinctions
+- examples that explain mechanism rather than merely illustrate it
+- section structure that is already operationally useful
+
+If `3+` triggers are present, classify the source as
+`low-noise, high-structure` and use a `high-fidelity synthesis`.
+Preserve nearly all major sections, frameworks, checklists, matrices,
+distinctions, and materially different examples. Compress wording,
+repeated phrasing, and decorative transitions rather than cutting
+substance. Do not turn a structured memo into a thin executive summary.
+Do not choose page length by matching prior wiki averages or by
+assuming `synthesis` implies short.
+
+If fewer than `3` triggers are present, use normal compression
+judgment. Stronger compression is acceptable for noisy or repetitive
+sources, but keep argument structure, mechanisms, useful distinctions,
+and reusable takeaways. Remove repetition, filler, and weak examples
+more aggressively than you would for a dense source.
+
 ## Step 3: Auto-Classify
 
 Read the source and decide what wiki pages to produce. No user
@@ -129,8 +155,14 @@ report.
 Present to the user:
 1. The confrontation report (Step 4)
 2. The verification report (Step 5)
-3. Proposed wiki pages to create/update:
-   - The main page (summary, synthesis, or concept per Step 3)
+3. The intended fidelity mode for the main page:
+   - `high-fidelity synthesis` for a `low-noise, high-structure`
+     source
+   - `standard compression` for a noisier source
+   Include a one-line reason based on the Step 2b triggers so the user
+   can correct the compression strategy before writing begins.
+4. Proposed wiki pages to create/update:
+   - The main page (synthesis, concept, or entity per Step 3)
    - Entity pages for people, orgs, tools mentioned or clearly implied.
      **Notability filter**: only propose entity pages for well-known
      figures, organizations, or tools — people with significant public
@@ -147,7 +179,7 @@ Present to the user:
      implied. When the source uses ideas that map to established concepts
      under different names, propose linking to the established concept
      and noting the author's framing as a variant.
-4. Proposed updates to existing pages (if any CONTRADICTS or STRENGTHENS
+5. Proposed updates to existing pages (if any CONTRADICTS or STRENGTHENS
    findings apply). Contestation updates to existing pages require
    explicit approval — call them out separately.
 
@@ -160,11 +192,18 @@ Based on the approved plan:
 
 1. **Main page**: Create the main page in `wiki/` with full frontmatter
    (`type`, `date`, `sources`, `aliases`, `tags`). The type is determined
-   by Step 3's auto-classification. Write the page in English,
-   preserving the source's depth and arguments. If any claims or
-   entities were EXCLUDED by the Popper filter, add a `## Filtered
-   Claims` section at the end of the page body (before Links)
-   documenting what was excluded and why.
+   by Step 3's auto-classification. Write the page in English and apply
+   the Step 2b compression mode. For a `low-noise, high-structure`
+   source, produce a `high-fidelity synthesis`: preserve nearly all
+   major sections, frameworks, checklists, matrices, distinctions, and
+   materially different examples, then compress wording and repetition
+   without stripping business substance. For noisier sources, stronger
+   compression is acceptable if the page still preserves the source's
+   argument structure, mechanisms, and reusable takeaways. Repo-local
+   instructions still win when they explicitly require a shorter or
+   differently shaped output. If any claims or entities were EXCLUDED by
+   the Popper filter, add a `## Filtered Claims` section at the end of
+   the page body (before Links) documenting what was excluded and why.
 2. **Entity pages**: Create or update entity pages (`type: entity`) for
    each approved entity. Include a description, context, and wikilinks.
 3. **Concept pages**: Create or update concept pages (`type: concept`)

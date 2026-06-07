@@ -9,6 +9,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SKILL_FILES = sorted(REPO_ROOT.glob("skills/*/*/SKILL.md"))
+INGEST_SKILL = REPO_ROOT / "skills" / "agenpedia" / "ingest" / "SKILL.md"
 INGEST_YOUTUBE_SCRIPT = (
     REPO_ROOT
     / "skills"
@@ -83,6 +84,22 @@ def test_skills_ship_required_metadata_and_policy_alignment():
         allow_implicit = metadata["policy"]["allow_implicit_invocation"].lower() == "true"
         disable_model_invocation = frontmatter["disable-model-invocation"].lower() == "true"
         assert allow_implicit == (not disable_model_invocation)
+
+
+def test_ingest_skill_documents_anti_overcompression_rules():
+    text = INGEST_SKILL.read_text(encoding="utf-8")
+    lowered = text.lower()
+
+    assert "## Step 2b: Assess Source Density and Compression Strategy" in text
+    assert "low repetition" in lowered
+    assert "high ratio of mechanisms, arguments, or frameworks to filler" in lowered
+    assert "reusable lists, checklists, matrices, or distinctions" in lowered
+    assert "examples that explain mechanism rather than merely illustrate it" in lowered
+    assert "section structure that is already operationally useful" in lowered
+    assert "high-fidelity synthesis" in lowered
+    assert "do not choose page length by matching prior wiki averages" in lowered
+    assert "repo-local" in lowered
+    assert "instructions still win" in lowered
 
 
 def test_ingest_youtube_default_output_targets_repo_root_raw(tmp_path, monkeypatch, capsys):
