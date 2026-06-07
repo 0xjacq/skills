@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fetch a YouTube transcript and save it as a raw Agenpedia source."""
+"""Fetch a caption-first YouTube transcript and save it as a raw Agenpedia source."""
 
 from __future__ import annotations
 

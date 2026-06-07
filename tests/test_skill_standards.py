@@ -174,3 +174,27 @@ def test_ingest_youtube_relative_raw_dir_resolves_from_repo_root(tmp_path, monke
     created_path = tmp_path / "repo" / "raw" / "custom" / "youtube-video123.md"
     assert created_path.is_file()
     assert capsys.readouterr().out.strip() == "raw/custom/youtube-video123.md"
+
+
+def test_ingest_youtube_run_yt2txt_relies_on_backend_defaults(monkeypatch, tmp_path):
+    module = load_ingest_youtube_module()
+    captured: dict[str, object] = {}
+
+    def fake_run(*args, **kwargs):
+        captured["args"] = args[0]
+        captured["kwargs"] = kwargs
+        return subprocess.CompletedProcess(args[0], 0, "", "")
+
+    monkeypatch.setattr(module.subprocess, "run", fake_run)
+
+    output_dir = tmp_path / "yt2txt-output"
+    result = module.run_yt2txt("/usr/local/bin/yt2txt.sh", "https://youtu.be/AbC123xyz89", output_dir)
+
+    assert result.returncode == 0
+    assert captured["args"] == [
+        "/usr/local/bin/yt2txt.sh",
+        "https://youtu.be/AbC123xyz89",
+        "--output",
+        str(output_dir),
+    ]
+    assert "--markers" not in captured["args"]

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fetch a YouTube transcript and save it into the current workspace."""
+"""Fetch a caption-first YouTube transcript and save it into the current workspace."""
 
 from __future__ import annotations
 
@@ -64,7 +64,7 @@ def resolve_cli(cli_path: str) -> str:
 
 def run_yt2txt(cli: str, url: str, output_dir: Path) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [cli, url, "--output", str(output_dir)],
+        [cli, url, "--output", str(output_dir), "--markers"],
         input="n\n",
         capture_output=True,
         text=True,

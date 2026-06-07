@@ -43,16 +43,20 @@ is missing.
    python3 /absolute/path/to/scripts/fetch_youtube_transcript.py "<youtube-url>"
    ```
 
-4. The helper writes a markdown transcript file and prints its path on
+4. The helper runs `yt2txt.sh` in caption-first mode:
+   creator subtitles, then YouTube automatic captions, then ASR fallback.
+   It also preserves human-readable caption markers like `>>` and
+   `[music]` for downstream HTML synthesis.
+5. The helper writes a markdown transcript file and prints its path on
    stdout. By default it creates `youtube-<video-id>.md` in the current
    workspace. If the user specified a transcript filename or path,
    forward that to the helper.
-5. Verify that the transcript file exists and contains the raw
+6. Verify that the transcript file exists and contains the raw
    transcript. Do not summarize or rewrite the markdown transcript.
-6. Create one self-contained HTML file beside the transcript by default,
+7. Create one self-contained HTML file beside the transcript by default,
    using the same basename with an `.html` extension unless the user
    asked for another output path.
-7. Before drafting the HTML, choose the figure types you will use.
+8. Before drafting the HTML, choose the figure types you will use.
    Prefer layout-safe HTML or responsive SVG patterns over freehand
    one-off figures. Read [references/figure-recipes.md](references/figure-recipes.md)
    and [references/layout-guardrails.md](references/layout-guardrails.md)
@@ -195,6 +199,6 @@ Load only what the artifact needs:
 `scripts/fetch_youtube_transcript.py` performs the deterministic
 transcription step:
 - validates that the URL points to a single video
-- runs `yt2txt.sh` non-interactively
+- runs `yt2txt.sh` non-interactively with caption markers preserved
 - writes a markdown transcript into the current workspace
 - prints the created transcript path for the next synthesis step

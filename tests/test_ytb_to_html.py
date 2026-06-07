@@ -55,6 +55,31 @@ def test_extract_video_id_rejects_non_video_urls(url):
         module.extract_video_id(url)
 
 
+def test_ytb_to_html_run_yt2txt_forwards_markers_flag(monkeypatch, tmp_path):
+    module = load_ytb_to_html_module()
+    captured: dict[str, object] = {}
+
+    def fake_run(*args, **kwargs):
+        captured["args"] = args[0]
+        captured["kwargs"] = kwargs
+        return subprocess.CompletedProcess(args[0], 0, "", "")
+
+    monkeypatch.setattr(module.subprocess, "run", fake_run)
+
+    output_dir = tmp_path / "yt2txt-output"
+    result = module.run_yt2txt("/usr/local/bin/yt2txt.sh", "https://youtu.be/AbC123xyz89", output_dir)
+
+    assert result.returncode == 0
+    assert captured["args"] == [
+        "/usr/local/bin/yt2txt.sh",
+        "https://youtu.be/AbC123xyz89",
+        "--output",
+        str(output_dir),
+        "--markers",
+    ]
+    assert captured["kwargs"]["input"] == "n\n"
+
+
 def test_ytb_to_html_default_output_targets_current_workspace(tmp_path, monkeypatch, capsys):
     module = load_ytb_to_html_module()
     workspace = tmp_path / "workspace"

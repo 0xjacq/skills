@@ -39,14 +39,18 @@ is missing.
    python3 scripts/fetch_youtube_transcript.py "<youtube-url>"
    ```
 
-3. The script writes a markdown source file under `raw/` and prints the
+3. The script relies on `yt2txt.sh` default caption-first behavior:
+   creator subtitles, then YouTube automatic captions, then ASR fallback.
+   Do not add extra transcript-source flags at the skill layer unless
+   the backend contract changes.
+4. The script writes a markdown source file under `raw/` and prints the
    repo-relative file path on stdout, for example
    `raw/youtube-abc123xyz89.md`, even though the script is launched from
    inside the skill directory.
-4. Verify that the printed file exists and contains the raw transcript.
+5. Verify that the printed file exists and contains the raw transcript.
    Do not summarize, translate, or clean the transcript unless the user
    asked for that separately.
-5. Immediately continue by invoking the `ingest` skill with the emitted
+6. Immediately continue by invoking the `ingest` skill with the emitted
    file path as its argument.
 
 ## Failure Handling
@@ -63,6 +67,7 @@ is missing.
 does the deterministic work:
 
 - runs `yt2txt.sh` non-interactively
+- relies on the backend default caption-first source selection
 - reads the generated transcript
 - writes a markdown source file into `raw/`
 - prints the relative `raw/...` file path for the next `ingest` step
