@@ -233,6 +233,28 @@
       background: #f2e8db;
     }
 
+    .mermaid-figure {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      background: #f2e8db;
+      overflow-x: auto;
+    }
+
+    .mermaid-svg svg,
+    .mermaid-figure svg {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+
+    .mermaid-fallback figcaption {
+      margin-bottom: 0.75rem;
+      color: var(--muted);
+      font-family: var(--sans);
+    }
+
     .iframe-wrapper {
       position: relative;
       margin: 1.5rem 0;

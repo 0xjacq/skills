@@ -96,6 +96,7 @@ Preserve the source document's:
 - lists
 - tables
 - fenced and indented code blocks
+- Mermaid fenced diagrams as diagrams, not ordinary code blocks
 - links
 - images
 - blockquotes
@@ -127,6 +128,7 @@ Allowed upgrades:
 - `newthought` and `sans` utility styling when those classes appear in the source
 - figure and figcaption treatment for images that already have caption-like context
 - code block wrappers with quiet copy buttons
+- Mermaid fenced code blocks rendered as readable diagrams
 - metadata rows for frontmatter fields
 - mobile-friendly CSS-only note toggles
 
@@ -149,6 +151,8 @@ Allowed:
 - sticky table of contents
 - copy buttons for code blocks
 - CSS-only note toggles for sidenotes and margin notes on small screens
+
+Mermaid diagrams must not depend on runtime JavaScript when a local renderer is available. Prefer pre-rendering fenced `mermaid` blocks to inline SVG during generation so the final HTML remains self-contained and locally viewable.
 
 Disallowed unless the source document explicitly requires them:
 - tabs
@@ -180,6 +184,7 @@ Preserve shared house primitives wherever possible:
 - the brief template's heading rhythm
 - the brief template's nav styling and quiet gutter treatment
 - the brief template's code, table, figcaption, and callout treatment
+- the brief template's quiet bordered treatment for rendered diagrams
 
 Desktop composition rules:
 - the reading column is the visual center of the page
@@ -195,6 +200,47 @@ Intentional divergences from canonical Tufte CSS:
 - keep the local serif and sans fallback stacks instead of vendoring ET Book and Gill Sans
 - keep the TOC rail as a repo-specific extension on the left while reserving the right gutter for Tufte notes
 
+## Mermaid diagrams
+
+Treat fenced blocks with language `mermaid` as source-signaled diagrams.
+
+Rendering requirements:
+- Do not emit Mermaid blocks as `<pre><code class="language-mermaid">...`.
+- Do not add copy buttons to Mermaid diagrams by default.
+- Prefer rendering Mermaid to inline SVG and embedding that SVG directly in `{{BODY_HTML}}`.
+- Wrap rendered diagrams in `<figure class="figure-wide mermaid-figure">...</figure>` or `<figure class="mermaid-figure">...</figure>` depending on diagram width.
+- Preserve the original Mermaid source in a non-visible HTML comment near the rendered figure for auditability.
+- If rendering fails, keep the Mermaid source visible in a styled fallback block and include a short non-alarming caption such as `Mermaid diagram source shown because rendering failed.`
+
+Renderer preference order:
+1. Use a local Mermaid renderer if present, such as `mmdc`.
+2. If a project already has Mermaid available in its toolchain, use that local package to render SVG.
+3. If no local renderer is available, ask before using a network CDN because CDN Mermaid output is not fully self-contained.
+4. Never silently degrade Mermaid diagrams into ordinary code blocks.
+
+Recommended inline SVG wrapper:
+
+```html
+<figure class="figure-wide mermaid-figure">
+  <!-- mermaid-source:
+  flowchart TD
+      A["Example"] --> B["Result"]
+  -->
+  <div class="mermaid-svg">
+    <!-- inline SVG here -->
+  </div>
+</figure>
+```
+
+Recommended fallback wrapper:
+
+```html
+<figure class="figure-wide mermaid-figure mermaid-fallback">
+  <figcaption>Mermaid diagram source shown because rendering failed.</figcaption>
+  <pre><code class="language-mermaid">...</code></pre>
+</figure>
+```
+
 ## Rendering workflow
 
 1. Load the markdown source and detect frontmatter if present.
@@ -204,9 +250,10 @@ Intentional divergences from canonical Tufte CSS:
 5. Convert markdown footnotes into adjacent Tufte-style sidenote markup.
 6. Preserve explicit source-signaled margin notes and supported Tufte utility classes.
 7. Build a table of contents from meaningful headings.
-8. Wrap wide tables, figures, iframe media, and code blocks only when needed for readability.
-9. Populate the template so the TOC lives in the left gutter and all notes stay inside `{{BODY_HTML}}`.
-10. Verify the output is self-contained and preserves the source's information content.
+8. Render Mermaid fenced blocks to inline SVG where possible, with a visible fallback if rendering fails.
+9. Wrap wide tables, figures, iframe media, rendered diagrams, and code blocks only when needed for readability.
+10. Populate the template so the TOC lives in the left gutter and all notes stay inside `{{BODY_HTML}}`.
+11. Verify the output is self-contained and preserves the source's information content.
 
 ## Acceptance standard
 
@@ -220,3 +267,4 @@ A good result produced with this skill should:
 - keep the reading column centered even when TOC density or note density changes
 - avoid large dead space to the left of the TOC on wide desktop viewports
 - remain faithful enough that a reader can trust nothing important was omitted
+- display Mermaid diagrams as diagrams rather than raw source whenever a local renderer is available
