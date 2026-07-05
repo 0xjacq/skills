@@ -10,6 +10,10 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SKILL_FILES = sorted(REPO_ROOT.glob("skills/*/*/SKILL.md"))
 INGEST_SKILL = REPO_ROOT / "skills" / "agenpedia" / "ingest" / "SKILL.md"
+INGEST_BATCH_SKILL = REPO_ROOT / "skills" / "agenpedia" / "ingest-batch" / "SKILL.md"
+INGEST_YOUTUBE_SKILL = REPO_ROOT / "skills" / "agenpedia" / "ingest-youtube" / "SKILL.md"
+QUERY_SKILL = REPO_ROOT / "skills" / "agenpedia" / "query" / "SKILL.md"
+LINT_SKILL = REPO_ROOT / "skills" / "agenpedia" / "lint" / "SKILL.md"
 INGEST_YOUTUBE_SCRIPT = (
     REPO_ROOT
     / "skills"
@@ -100,6 +104,27 @@ def test_ingest_skill_documents_anti_overcompression_rules():
     assert "do not choose page length by matching prior wiki averages" in lowered
     assert "repo-local" in lowered
     assert "instructions still win" in lowered
+
+
+def test_agenpedia_follow_on_skills_propagate_anti_overcompression_rules():
+    batch_text = " ".join(INGEST_BATCH_SKILL.read_text(encoding="utf-8").lower().split())
+    youtube_text = " ".join(INGEST_YOUTUBE_SKILL.read_text(encoding="utf-8").lower().split())
+    query_text = " ".join(QUERY_SKILL.read_text(encoding="utf-8").lower().split())
+    lint_text = " ".join(LINT_SKILL.read_text(encoding="utf-8").lower().split())
+
+    assert "do not normalize batch" in batch_text
+    assert "likely high-fidelity" in batch_text
+
+    assert "step 2b source-density check and compression mode" in youtube_text
+    assert "do not pre-compress long transcripts at this adapter layer" in youtube_text
+    assert "thin summary" in youtube_text
+
+    assert "high-fidelity synthesis" in query_text
+    assert "do not collapse a rich cross-page answer into a thin executive summary" in query_text
+
+    assert "### 6. undercompressed syntheses" in lint_text
+    assert "thin executive summaries" in lint_text
+    assert "auto-fix in auto-maintenance mode only when the missing structure is explicit and source-grounded" in lint_text
 
 
 def test_ingest_youtube_default_output_targets_repo_root_raw(tmp_path, monkeypatch, capsys):

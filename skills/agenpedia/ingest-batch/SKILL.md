@@ -16,6 +16,10 @@ Read `AGENTS.md` at the project root for wiki conventions, page types,
 frontmatter schema, naming conventions, and cross-reference rules.
 All operations below must conform to those rules.
 
+All page-writing decisions still belong to `ingest`. That includes the
+source-density check and compression strategy. Do not normalize batch
+outputs to a common length or assume every synthesis should be short.
+
 ## Step 1: Collect Sources
 
 Determine the input type from the argument:
@@ -58,6 +62,11 @@ Present the triage results as a table:
 | raw/paper-part1.md | MERGE (group 1) | Part 1 of paper on Y |
 | raw/paper-part2.md | MERGE (group 1) | Part 2 of paper on Y |
 ```
+
+For any INGEST or MERGE item that already looks low-noise and
+high-structure, add a short note such as `likely high-fidelity
+synthesis` so the downstream ingest approval does not accidentally
+overcompress it.
 
 **Wait for the user's approval.** The user may change verdicts before
 confirming.

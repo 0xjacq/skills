@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anthropic Workshop: Build Agents That Run for Hours</title>
+  <style>
+    :root {
+      --bg: #fffff8;
+      --fg: #111111;
+      --muted: #5c5c57;
+      --line: #d8d3c9;
+      --accent: #8f3d2e;
+      --accent-soft: #efe4df;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --max: 88rem;
+      --toc: 13rem;
+      --main: 46rem;
+      --context: 16rem;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--serif);
+      line-height: 1.62;
+    }
+
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 2.25rem 1.5rem 5.5rem;
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.25rem;
+    }
+
+    .eyebrow, .meta, nav, .pill, table, summary {
+      font-family: var(--sans);
+    }
+
+    h1, h2, h3 {
+      font-weight: 500;
+      line-height: 1.1;
+      margin: 0 0 0.75rem;
+    }
+
+    h1 { font-size: 2.45rem; }
+    h2 { font-size: 1.5rem; margin-top: 2.9rem; }
+    h3 { font-size: 1.08rem; margin-top: 1.7rem; }
+
+    .subtitle, .meta {
+      color: var(--muted);
+      max-width: 52rem;
+    }
+
+    .summary {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      padding: 0.45rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      background: #fffdfa;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(11rem, var(--toc)) minmax(0, var(--main)) minmax(0, var(--context));
+      gap: 2.75rem;
+      align-items: start;
+      justify-content: center;
+    }
+
+    main { min-width: 0; }
+
+    .toc-rail {
+      position: sticky;
+      top: 1.25rem;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      align-self: start;
+      color: var(--muted);
+    }
+
+    .context-rail {
+      font-size: 0.95rem;
+      line-height: 1.52;
+      align-self: start;
+      color: var(--muted);
+    }
+
+    .toc-rail section,
+    .context-rail section {
+      margin-bottom: 1.5rem;
+    }
+
+    .toc-rail section {
+      border-left: 2px solid var(--line);
+      padding-left: 0.9rem;
+    }
+
+    .context-rail section {
+      border-left: 1px solid var(--line);
+      padding-left: 1rem;
+    }
+
+    nav a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+      padding: 0.18rem 0;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    p, ul, ol, pre, table, figure, blockquote, details {
+      margin: 0 0 1.2rem;
+    }
+
+    ul, ol { padding-left: 1.35rem; }
+
+    .callout {
+      border: 1px solid var(--line);
+      background: #fffdfa;
+      padding: 0.9rem 1rem;
+      margin: 1.15rem 0;
+    }
+
+    .callout.warn {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .figure-wide {
+      margin: 1.9rem 0;
+      padding: 1rem 1.05rem;
+      border: 1px solid var(--line);
+      background: #fffdfa;
+    }
+
+    figcaption {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    pre, code {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+    }
+
+    pre {
+      overflow: auto;
+      padding: 0.85rem;
+      border: 1px solid var(--line);
+      background: #fcfbf7;
+      white-space: pre-wrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.96rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.45rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    blockquote {
+      margin-left: 0;
+      padding: 0.2rem 0 0.2rem 1rem;
+      border-left: 3px solid var(--accent);
+      color: #2c2c28;
+    }
+
+    .quote-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      background: #fffdfa;
+      padding: 0.9rem 1rem;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    .transcript p {
+      margin-bottom: 0.95rem;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 1279px) {
+      .layout {
+        grid-template-columns: minmax(11rem, var(--toc)) minmax(0, var(--main));
+        grid-template-areas:
+          "toc main"
+          ". context";
+      }
+
+      .toc-rail { grid-area: toc; }
+      main { grid-area: main; }
+      .context-rail { grid-area: context; }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "toc"
+          "main"
+          "context";
+        gap: 1.5rem;
+      }
+
+      .toc-rail { position: static; }
+
+      .context-rail section {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+        padding-left: 0;
+        padding-top: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="eyebrow">research brief</div>
+      <h1>Anthropic Workshop: Build Agents That Run for Hours</h1>
+      <p class="subtitle">A synthesis of Ash Prabaker and Andrew Wilson's talk on why long-running agents fail, how model and harness improvements co-evolve, and which patterns currently matter most in practice.</p>
+      <p class="meta">Source: one YouTube transcript synthesized from local ASR | Fetched 2026-06-06 03:47:36Z</p>
+      <div class="summary">
+        <span class="pill">Long runs fail on context, planning, and weak self-verification</span>
+        <span class="pill">Harness quality matters almost as much as model quality</span>
+        <span class="pill">Fresh context, persistent state, and evaluators are the core patterns</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc-rail" aria-label="Document contents">
+        <section>
+          <strong>On This Page</strong>
+          <nav>
+            <a href="#overview">Overview</a>
+            <a href="#frictions">Why Long Runs Break</a>
+            <a href="#timeline">Release Arc</a>
+            <a href="#patterns">Harness Patterns</a>
+            <a href="#quotes">Selected Excerpts</a>
+            <a href="#appendix">Transcript Appendix</a>
+          </nav>
+        </section>
+      </aside>
+
+      <main>
+        <section id="overview">
+          <h2>Overview</h2>
+          <p>The talk frames long-running agents as a combined model problem and systems problem. Andrew walks through the release history from early Claude Code to Agent SDK, Skills, Agent Teams, server-side compaction, and larger context windows. Ash then focuses on more experimental harnesses, especially generator-evaluator loops that separate building from judging and push the evaluator to inspect real outputs rather than trust the generator's internal story.</p>
+          <div class="callout">Key takeaway: better base models extend the frontier, but they do not eliminate the need for harness design. The bottleneck moves from raw capability toward memory, planning discipline, and trustworthy verification.</div>
+          <div class="callout warn">This artifact is grounded only in the local ASR transcript. The title is inferred from the downloaded audio filename, and the transcript contains occasional recognition noise, especially in Q&amp;A.</div>
+        </section>
+
+        <section id="frictions">
+          <h2>Why Long Runs Break</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Failure area</th>
+                <th>What the speakers mean</th>
+                <th>Why the harness helps</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Context</td>
+                <td>Finite windows create amnesia between sessions and "context rot" within a long session.</td>
+                <td>Fresh sessions, compaction, memory files, and progressive disclosure reduce overload.</td>
+              </tr>
+              <tr>
+                <td>Planning</td>
+                <td>Models try to do too much in one pass, stop halfway, or exhaust context before finishing.</td>
+                <td>Initializer steps, explicit feature lists, and one-feature-at-a-time loops create smaller units of work.</td>
+              </tr>
+              <tr>
+                <td>Verification</td>
+                <td>Models are often satisfied by plausible-looking output, even when the backend or behavior is incomplete.</td>
+                <td>Separate evaluators, live-page testing, and adversarial critique make false completion harder.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="timeline">
+          <h2>Release Arc</h2>
+          <p>The historical portion of the talk argues that long-run performance improved through repeated model-plus-harness co-releases, not model gains alone.</p>
+          <figure class="figure-wide">
+            <svg viewBox="0 0 820 220" width="100%" role="img" aria-label="Evolution from early Claude Code to long-running agent primitives">
+              <line x1="50" y1="110" x2="770" y2="110" stroke="#b9b1a4" stroke-width="2" />
+              <circle cx="90" cy="110" r="9" fill="#8f3d2e" />
+              <circle cx="230" cy="110" r="9" fill="#8f3d2e" />
+              <circle cx="370" cy="110" r="9" fill="#8f3d2e" />
+              <circle cx="510" cy="110" r="9" fill="#8f3d2e" />
+              <circle cx="650" cy="110" r="9" fill="#8f3d2e" />
+              <circle cx="770" cy="110" r="9" fill="#8f3d2e" />
+              <text x="90" y="82" text-anchor="middle" font-family="sans-serif" font-size="14">Sonnet 3.5 era</text>
+              <text x="90" y="150" text-anchor="middle" font-family="sans-serif" font-size="13">Artifacts, Computer Use, MCP</text>
+              <text x="230" y="82" text-anchor="middle" font-family="sans-serif" font-size="14">Claude Code preview</text>
+              <text x="230" y="150" text-anchor="middle" font-family="sans-serif" font-size="13">CLI loop, early research harness</text>
+              <text x="370" y="82" text-anchor="middle" font-family="sans-serif" font-size="14">Opus 4 / Sonnet 4</text>
+              <text x="370" y="150" text-anchor="middle" font-family="sans-serif" font-size="13">Better task completion, SDK GA</text>
+              <text x="510" y="82" text-anchor="middle" font-family="sans-serif" font-size="14">Sonnet 4.5</text>
+              <text x="510" y="150" text-anchor="middle" font-family="sans-serif" font-size="13">Context awareness, checkpoints</text>
+              <text x="650" y="82" text-anchor="middle" font-family="sans-serif" font-size="14">Haiku/Opus 4.5</text>
+              <text x="650" y="150" text-anchor="middle" font-family="sans-serif" font-size="13">Cheap subagents, better planning, Skills</text>
+              <text x="770" y="82" text-anchor="middle" font-family="sans-serif" font-size="14">Opus/Sonnet 4.6</text>
+              <text x="770" y="150" text-anchor="middle" font-family="sans-serif" font-size="13">Agent Teams, server compaction, 1M ctx</text>
+            </svg>
+            <figcaption>Speaker framing: the frontier shifted from short coding sessions toward multi-hour or multi-day runs as both models and harness primitives improved together.</figcaption>
+          </figure>
+          <p>Two numerical claims anchor the story. First, they cite a jump from roughly one hour to roughly twelve hours on a minimal-scaffold benchmark over about a year of model progress. Second, they mention practical greenfield app builds that now often land in the three-to-five-hour range rather than requiring thirty-hour runs.</p>
+        </section>
+
+        <section id="patterns">
+          <h2>Harness Patterns That Matter</h2>
+          <h3>1. Fresh context plus persistent artifacts</h3>
+          <p>The long-running app-builder example starts with an initializer that writes durable state: a feature list, a progress file, a repo bootstrap, and an init script. From there, each loop begins in a fresh context window, regains its bearings from the filesystem, smoke-tests the project, picks exactly one unfinished feature, implements it, verifies it, commits it, and updates the persistent state.</p>
+          <pre><code>initializer
+  -> featurelist.json
+  -> progress.json
+  -> init script
+loop
+  -> fresh session regains bearings
+  -> smoke test / start app
+  -> pick one unfinished feature
+  -> implement
+  -> verify with live checks
+  -> commit + mark pass
+  -> continue until complete</code></pre>
+
+          <h3>2. Generator-evaluator separation</h3>
+          <p>A single session checking its own work is easy to fool. Their stronger pattern splits the builder from the judge. The evaluator does not just read diffs; it uses tools like Playwright to inspect the live page, click around, and return critique grounded in behavior. The generator then has to repair the issue without inheriting the evaluator's entire internal chain of thought.</p>
+
+          <h3>3. Role specialization by model cost and capability</h3>
+          <p>One practical combination they call out is using the strongest model for planning and a cheaper or faster model as the workhorse. They describe Opus-class models as especially strong for planning and tool choice, while Sonnet-class models become economical executors.</p>
+
+          <h3>4. Breadcrumbs for future agents and humans</h3>
+          <p>A recurring theme is writing structured state back to disk. JSON files are preferred because the model is less likely to casually overwrite them. These files act as breadcrumbs for another agent or a human to inspect and continue from, including records like what was tried, what the evaluator found, and what fixes actually worked.</p>
+
+          <h3>5. Greenfield is easier than brownfield</h3>
+          <p>The speakers are explicit that this pattern currently fits greenfield builds better than existing production codebases. Brownfield use still benefits from agents, but usually through narrower loops such as monitoring, bug-fix generation, pull-request creation, or targeted evaluator passes rather than one giant autonomous app-building run.</p>
+        </section>
+
+        <section id="quotes">
+          <h2>Selected Excerpts</h2>
+          <div class="quote-grid">
+            <blockquote>
+              <p>“The frontier doesn't really shrink, it just moves.”</p>
+              <p class="small">Used to frame why better models change the bottleneck instead of removing the need for harness design.</p>
+            </blockquote>
+            <blockquote>
+              <p>“It's much more effective to just let it judge the output.”</p>
+              <p class="small">Their argument against leaking the generator's context or rationales into the evaluator.</p>
+            </blockquote>
+            <blockquote>
+              <p>“Read the whole thing.”</p>
+              <p class="small">Their blunt answer on trace debugging: manual trace reading still matters when you want to understand why an agent drifted.</p>
+            </blockquote>
+          </div>
+        </section>
+
+        <section id="appendix">
+          <h2>Transcript Appendix</h2>
+          <details>
+            <summary>Show full transcript</summary>
+            <p class="small">Rendered from <a href="youtube-mr-waveprwe.md">youtube-mr-waveprwe.md</a>. Paragraph breaks were added automatically for readability; wording remains source-derived.</p>
+            <div class="transcript">
+              <p>Nice to meet you guys. I&#x27;m Ash. This is Andrew. We both work in as engineers in our applied AI team here at Anthropic. And the kind of topic for this session was inspired by a blog post we put out just a couple weeks ago actually about how to think about building agents that can actually run for really long extended periods of time.</p>
+              <p>You know, we&#x27;re talking five six hour plus kind of runs. I think we&#x27;ve all seen these kind of. Demos, you know, of like companies being like, &quot;Hey, we&#x27;ve like one shotted a browser, for example,&quot; but not necessarily sharing like some of the details into what goes into the harness, and that&#x27;s what you kind of want to talk about today. So, the first off, my amazing colleague Andrew will talk about a little bit about basically how we&#x27;ve got here some of the primitive that we&#x27;ve shipped in code, and you know where we are today, and then I&#x27;ll hop back on stage and talk a little bit about some of the more experimental stuff that we&#x27;re playing with harnesses, as well as you know a few examples of of what we&#x27;ve seen. Over tea.</p>
+              <p>Sounds good, thank you Ash. And yeah, thanks everyone for joining first session of the engineer conference. So glad you&#x27;re spending it with us. My name is Andrew. I&#x27;m on the Applied AI team based out of London, working as a solution architect with a lot of our digital native and industries customers.</p>
+              <p>So. Yeah, I&#x27;m going to give a little bit of a history tour, trip down memory lane, but really with the focus on all the things that we&#x27;ve shipped that lead to agents being able to run for multiple hours or even days at a time, and then I&#x27;ll hand over to Ash to do more of the the state of the art. Right. Okay. So, little quote from on Twitter from Boris, the creator of Claude Code.</p>
+              <p>This was on the one year anniversary of Claude Code, basically saying a year ago, Claude was struggling just to write bash commands and escaping strings, and it could run for you know maybe twenty minutes at a time, and then we&#x27;re now at the point where almost all of Claude Code is being written by Claude Code and it can run effectively for days at a time. So sort of a big, big swing over just the course of a year, and I&#x27;ll walk through that history a little bit now. But just to, let me zoom in here, just to sort of. Frame the problem up like why why is it that it&#x27;s really difficult for these agents to run for extended periods of time, I think broadly there&#x27;s three big buckets. Some are more intuitive than others.</p>
+              <p>So firstly context, I think we all understand context windows very much finite. So you start a new session, there&#x27;s like amnesia, the agent has to start from scratch. So you need some sort of memory components. Also, as you&#x27;re working through a context window, there&#x27;s this notion of context rot. So there&#x27;s less coherence as you&#x27;re getting deeper into that session.</p>
+              <p>Also, you might get to the point where, the model actually exhibits what&#x27;s called context anxiety. So it gets kind of nervous as it reaches the end of its context window, and it just quickly hurries up to finish what it&#x27;s doing. This kind of leads into planning. So. In general, models are not that great at planning just out of the box.</p>
+              <p>They might try and do everything in just one shot, or, for example, they might build half a feature and then stop, or they might just run out of context altogether and sort of leave a half-finished app built. But then maybe less intuitively, models are really bad at judging their own output. So I know we all know that models can be sickophantic and sort of tell you what you want to hear. But this applies as well to coding tasks. So it might look at a feature and see that it&#x27;s sort of half half baked or a little bit implemented and say, &quot;Yeah, okay, that looks done,&quot; and then we&#x27;ll move on to the next thing.</p>
+              <p>Or it might build a feature like a button, but actually the backend you know doesn&#x27;t exist for it. There&#x27;s sort of no nothing behind that, but it looks like the feature is done. So I know Ash will talk quite extensively of some of the new techniques we have to help with this, specifically so models can become better at judging their own output. So there&#x27;s there&#x27;s two ways really we can we can fix these things. The first one is obviously the model.</p>
+              <p>So, baking it all into the model weights themselves. And I&#x27;m sure you&#x27;ve all seen this this meter chart. It&#x27;s basically how long can an agent run for with a minimal scaffold, where it&#x27;s completing fifty percent of the tasks. And you&#x27;ll see from Opus three point seven it&#x27;s around one hour, and up to Opus four point six one year later it&#x27;s at twelve hours, so an entire day. And we&#x27;ve of course you know managed to get that running much longer.</p>
+              <p>Other people have as well, but this is just a sort of very minimal scaffold. The second thing that you can do is, of course, make changes to the harness itself. So this is the scaffolding around the model, and we have the agent SDK, which ships with all the primitives that we&#x27;ve been building over time. So there&#x27;s the core agent loop itself. Where you have Claude model that&#x27;s determining what to do, what tools to run, maybe it&#x27;s pulling in some tools from MCP servers, it might delegate some tasks to a sub agent, it&#x27;s bringing in all the context from things like Claude MD or the skills that are loaded or slash commands.</p>
+              <p>There&#x27;s a whole permission system, and this this will change over time as well as the models get better and improve. But these are sort of the the core primitives that we&#x27;re working with. And then of course you use this framework to to build your own harness for whatever it is you&#x27;re trying to do, such as some of the things that Ash will show later on when we get into more long running agents. I think what&#x27;s also interesting is just looking back at the last year of releases: is that when we&#x27;ve released a model, we&#x27;ve always also released a lot of harness changes alongside the models. So really, these things are co-evolving together.</p>
+              <p>So we&#x27;ll just look back. I suppose firstly, just pre-history beyond you know one year ago. I think we all remember that that period where Claude had the artifact section of Claude AI and and Sonnet three point five was the first model that really showed promise when it came to coding and it could now verify that it could look at what it had built and sort of iterate from there and that was quite an aha moment sort of. Pre-clod code, but then also we shipped computer use, so it could start clicking around, taking screenshots, testing its own code, as well as MCP spec, which enabled it to sort of use tools. So then, getting into Claude Code.</p>
+              <p>This is February twenty twenty five. So this is about just over a year ago. Sonnet three point seven was released in sort of state of the art on SUI bench, and Claude Code was released in research preview. And I think an interesting quote that I pulled from this release actually is that the goal of Claude Code was to better understand how developers use Claude for coding to inform future model improvements. So essentially, when we released Claude Code, the whole idea was for it to be somewhat experimental to inform how we actually improve the base model itself.</p>
+              <p>And you&#x27;ll see this trend that over time the models become better, the harness certain aspects of it might become less necessary, or it will evolve. Just just in terms of these slides as well, in the bottom left corner, these are some of the things that are sort of the focus of these releases, whether it&#x27;s context or planning, or verification, and then some some stats. But I&#x27;m not going to sort of read everything. So yeah, next this was around May time of last year. Opus Four and Sonnet Four were released, and just in general, these tools got much better at sort of managing their own context and getting to task completion without reward hacking or anything like that.</p>
+              <p>And then Clodcode became GA as well, and we released the Clodcode SDK. So sort of the harness powering Clodcode. A little interlude here from the timeline. I think everybody now knows about this Ralph Wiggum technique. You might not know that it was actually last July that this was that this came out when when Jeffrey Huntley initially released the paper because it really sort of gained a lot of traction around, say, December or so of last year when.</p>
+              <p>For example, people started playing around with it themselves. Claude also released our own, Ralph loop within the the Claude code harness itself. But essentially, it&#x27;s it&#x27;s quite sort of a simple technique that you&#x27;re just taking a prompt and you&#x27;re feeding it into Claude code CLI for example, and then you&#x27;re just running that on a loop until. All the tasks are complete. It&#x27;s a little bit deeper than that.</p>
+              <p>I think people tend to simplify it. There&#x27;s actually a few phases where it first, you know, would have some kind of planning, where it breaks down that prompt into a few different features, and then it would pick sort of one task from that and start a new session and then work with a fresh context window. So a lot of those concepts were applied in the real flu, but I think why it caught so much attention is because it&#x27;s. Sort of seemed really simplistic, and he put it deterministically bad in an undeterministic world. So the idea being that it&#x27;s better to fail predictably than it is to succeed unpredictably.</p>
+              <p>When we actually created our own plugin for this in Claude code. You&#x27;ll see, well I don&#x27;t know if people can recognize what what the major difference is. There&#x27;s some people say, you know that&#x27;s not a real Ralph loop. The idea is that this is just running within a single Claude code session, so it&#x27;s not creating a fresh context window. It&#x27;s just relying on compaction to happen over time.</p>
+              <p>So you know maybe it&#x27;s not considered sort of a real Ralph loop. But you&#x27;d set the max iterations, you&#x27;d set a safe word, and then essentially a stop hook would intercept. When Claude would typically stop, and if it&#x27;s not finished, it would just sort of continue until it hits one of those exit criteria. Okay, so onto sonnet four point five. This was, when the model just generally started getting better again at handling its own context.</p>
+              <p>So this is when became more context aware, tracking how many tokens had been consumed. So as it got towards the end of the context window, it sort of understand that and it could manage its own context. Cloud Code two point zero also shipped. This is where we introduced checkpoints, so actually keeping track of of the code over time, being able to rewind to previous parts of the session, and then we released we just sort of renamed the Cloud Code SDK to the Agent SDK, and that&#x27;s because we realized it&#x27;s much more general purpose than actually just for coding. So you&#x27;ll see we&#x27;re talking about coding a lot right now, but I think what&#x27;s very interesting is applying these long running harnesses to other domains as well.</p>
+              <p>At this point, we could run for about thirty hours or so with Claude Sonnet four point five. But then completing the family with Haiku four point five and Opus four point five, this is where it got really interesting because all of a sudden running many sub agents became really economical, and Opus four point five became really good at planning. So we could start doing things like using Opus four point five for planning, and then using Sonnet four point five as the workhorse for really executing all of that code. And then there&#x27;s a big couple months as well because this is when we release skills, which again very good at making use effective use of the context with this notion of progressive disclosure. So just the front matter of the skill is loaded in instead of sort of all of your tool descriptions, you know, which can consume quite a lot of the context window up front.</p>
+              <p>And then sort of the entire rest of the body of the skill is loaded in, if it&#x27;s instantiated, followed by say some references to even even code that could run more deterministically. And then more context improvements, things like programmatic tool calling. So instead of running a bunch of tools, pulling all of that into to context and then trying to process it, actually just writing code on the fly and being able to sort of run a series of tool calls and then just get the final result back. And again, this is all just to improve the the usage of of the context window. Okay, so a lot going on on this slide.</p>
+              <p>But at this point, this is around November time. We released our first blog post on long running agents and how you go about building these. So a lot of the concepts I&#x27;ve already described should make this fairly easy to understand. Actually, where say human would write something like, you know, write me a browser or create a Slack clone or Salesforce clone, just something like really really vague, and the first thing that would happen. In this harness that we built, is there&#x27;s an initializer agent, that would take that simple prompt and it would break it down into a series of persistent artifacts, the first being a feature list.</p>
+              <p>Of say X number of features, featurelist.json because we actually found the models might overwrite markdown files whereas they&#x27;re less likely to just overwrite JSON files, which is kind of interesting. It would also write a progress file, of course, sort of start the git repo, build an init script. And then just have a flag for you know whether the features are complete or not if they sort of pass all the tests. From there, it would go into this harness loop where there&#x27;s multiple different steps here. So the first one is.</p>
+              <p>You know, again in fresh context window, just getting the bearings. What&#x27;s the present working directory? What&#x27;s the the progress file say? Okay, and then doing a smoke test or running the init script, so it didn&#x27;t have to figure out how to do that every time. Get the server up and running, et cetera, and then picking one feature, only one feature that that hasn&#x27;t passed all the tests.</p>
+              <p>Implementing that feature, doing some actual tests, much so verification loop, much like a human would do using Puppeteer in this case, and then if if everything passes, actually writing the git commit and changing the the state of of this particular feature to passes, and then if there are any features that are unfinished, just continuing that loop in a fresh context window. So, we&#x27;re starting to layer in a lot of these concepts here: fresh context windows, these sort of persistent artifacts, verification loops, really good planning up front. You&#x27;ll see like this. This is sort of the first iteration of of these long running harnesses here. Okay, so, continue with the history tour.</p>
+              <p>So then, Opus four point six, Sonnet four point six. These models are really great because Sonnet four point six was basically offering that Opus level intelligence more at the Sonnet price, and it became again like very much a workhorse for a lot of Claude code. And Opus four point six, just became really good at planning. We called it. Like very much an agentic model, so Opus four point six was great at deciding like which tools to use and just being able to run for much longer.</p>
+              <p>If you recall that meter chart, you&#x27;ll see that this was a jump from about four hours up to twelve hours with sort of that very simple harness. So this model is like very very agentic. And then along with that, with some of the research we had done, we released Agent Teams, which the idea being in Claude Code is sort of more general purpose way for you to say scaffold out your own set set of custom agents. And the innovation with Agent Teams is that instead of everything reporting back into the main agent, the actual sub agents could communicate with each other, so they sort of had their own way to coordinate and then report back to the main agent only when it was required. We also introduced server side compaction, which basically meaning that these models can now just run indefinitely, and compaction could just sort of you know happen on the server side.</p>
+              <p>And then this one million context GA. So now we have like one big context window. You see like the models are getting better. Maybe you can just run a lot you know within a single context window even instead of necessarily needing new sessions all the time. You see how things start shifting over time.</p>
+              <p>So that&#x27;s sort of the the whole overview. You can see all of the different releases that I shared here on this table, and you can see how it&#x27;s changed from say Sonnet three point seven at one hour to twelve hours with Opus four point six, and then we have our own anecdotes as well, where tasks would take say you know like. Twenty minutes when it was Opus three point five and now we&#x27;re building say fully fledged apps that you don&#x27;t have to run for you know thirty hours. It can run typically. We&#x27;re seeing like say three to five hours.</p>
+              <p>You can build like a really really fully featured application that that runs out of the box. So, what&#x27;s really interesting is is the harness doesn&#x27;t just disappear as the models get better. It&#x27;s really evolving as the models change over time, and it&#x27;s really fascinating to sort of. Find the gaps in the model and then fill that in with the harness, and then you train the model on, using that aspect of the harness. Then maybe at some point you actually remove that entirely, and sort of this iterative loop just keeps happening over time with with more and more of these sort of co-releases that we have.</p>
+              <p>So, yeah, hopefully that was interesting. Little trip back through the Claude evolution and how it applies to the long running agents, and so I&#x27;ll hand over to Ash to continue with, where we are today in terms of the state of the art. Ah, all right. Um. Quick question: Any of you guys have any agents running at the moment in the background doing work while you&#x27;re here?</p>
+              <p>Just one, two, three. Okay. Probably should be more of you. Hopefully by the end of this, you&#x27;ll have some ideas to like take away and actually like put into practice. So yeah, that&#x27;s that&#x27;s the history, and I quite like that quote that.</p>
+              <p>Andrew talked about where the frontier doesn&#x27;t really shrink, it just, moves. And so what I wanted to talk about a little bit is some very simple. Kind of harness patterns that we&#x27;ve been playing around with internally that we use to, to build these like very fancy one shot demo apps, but also you know we&#x27;re experimenting with this stuff in post training, in RL. How do we make our models and just their general behaviors more adept at autonomous work. So, if you&#x27;ve ever tried to get an agent to try and review its own PR, you&#x27;ll kind of understand where this is going.</p>
+              <p>So, this general idea is shamelessly kind of stolen from from Gann&#x27;s. Generative kind of adversarial networks, so you have this, generator kind of model, and then you have some sort of discriminator, and you have some sort of adversarial pressure between them. You know the generator builds, the evaluator grades, and the whole idea here is we&#x27;re splitting up. You know the context windows, system prompts, the jobs entirely. Right?</p>
+              <p>The evaluator here isn&#x27;t just reading diffs, but it&#x27;s actually using playwright to open live pages, click around, try things out. And then it eventually hands back whatever critique gets decided back to the actual generator, and you you know you kind of continue that loop. Contrast that with what most people today are doing, which is kind of using one Claude session, telling it to check its own work, and kind of loop that way. So, the obvious question for me at least is: you know if the evaluator is also just an LLM, why doesn&#x27;t it just rob a stamp it too? And so, the key idea that we&#x27;re kind of exploiting here is: yes, the evaluator is still a large language model, and yes, it&#x27;s still going to be biased towards liking large language model style outputs.</p>
+              <p>But tuning a standalone critic to be harsh is actually very tractable. But tuning a builder to be somewhat self critical is is not. I think, a really good analogy for this right is is same as humans. It&#x27;s very easy for, me to you know critique a lovely piece of artwork or you know a fine meal. Much harder for me to actually go ahead and like you know paint that, or cook that meal myself.</p>
+              <p>So, what we&#x27;re doing here is exploiting the gap between the ability of an LLM to be kind of a critic versus a generator. So, the next thing I kind of want to talk about is like, how do you actually think about designing these critics? It&#x27;s very similar to the process of creating good evals, but in the context of full stack apps, there are a lot of fuzzy kind of areas which go into what makes something good. It&#x27;s not just does it work, but does it look good, does it feel good, is there an element of taste in these kind of products as well. So, this is where we&#x27;ve been doing a lot of experimental work, especially in trying to you know imbue Claude with design taste and post training, but also, you know, create these kind of front end design skills that we kind of put out there and just generally improve the the front end design ability of of our models.</p>
+              <p>So, the way we think about this is. Most people say you can&#x27;t grade taste, but you know we think, you can if you have a strong enough opinion on it and you just kind of write it down. And so the way we do this at least is with kind of creating a rubric with, four criteria: design, originality, craft, and functionality. We actually weight this towards design and originality. We&#x27;ve kind of shifted the weightings between these four things, depending on which models in play.</p>
+              <p>But at the moment, you know, Opus Four Six is pretty good at functionality already. So. The problem that we&#x27;re trying to overcome is how do we prevent things like you know purple gradients, general kind of AI slop type aesthetics in general. And we kind of just go ahead and calibrate this with a few short examples on reference sites. So the evaluators kind of taste converges on our own, and.</p>
+              <p>Let me show you an example. I guess of what this actually looks like, kind of in in practice. So, this is just an example, of. A model going through this similar kind of loop: generator evaluates launchers, playwright navigates, screenshots scores on those kind of four criteria, writes critique, and then hands back to generator. So all of these examples are just HTML and CSS only that I&#x27;ve gone through for maybe four hours, five, fifteen rounds.</p>
+              <p>I think the interesting thing here, which is quite unique and something which you wouldn&#x27;t necessarily get, if you&#x27;re just using a single kind of agent loop, is that. The thing pivots, right? So imagine the generator gets stuck on one of the fraud criteria. Let&#x27;s say it&#x27;s like really struggling and constantly scoring low on originality, you know. This kind of gan style harness, which we&#x27;re using, will just throw the whole thing out and try again from scratch, whereas, in a single pass generation or a Ralph loop, it keeps trying to patch the same thing.</p>
+              <p>And this kind of ability to kind of coarse correct over very long, kind of time horizons is something which is quite unique to kind of breaking down different roles that go into building something. So, that was just an insight into guess how we think about the front end component. But how to go from kind of like just nice pages to fully working apps? We added, one more role, a planner, and so again sounds very simple. It&#x27;s ultimately just taking kind of a one line prompt, and then breaking it down into a very deliberately high level kind of spec.</p>
+              <p>So. What it does is actually just specs the granular. Sorry, it kind of specs. The general workflow into a series of sprints, what it doesn&#x27;t do and what most harnesses do today is necessarily try and plan the granular technical details of the product. The reason being is you know.</p>
+              <p>One, it&#x27;s very likely to still make an error, but when it does make an error, it&#x27;s going to cascade, through every single one of these sprints and kind of magnify errors over a multi multi hour time horizon. If you kind of squint at this. This is kind of just you know a very simple kind of like PM, IC and QA kind of org structure, right? Like we didn&#x27;t invent this, we just kind of gave each role its own kind of context window. Um, and the bit which is kind of interesting, I think, to talk about is the glue between the generator and the evaluator in this kind of setup.</p>
+              <p>So, before the generator actually goes ahead and writes a single line, um, we have the two agents basically negotiate what done actually means, and so. Let&#x27;s say the generator proposes, &quot;I&#x27;m going to build X feature,&quot; and you should verify it by testing Y. The evaluator might push back and be like, &quot;Actually, the scope is too big, and those tests that you propose are a bit too weak, and you&#x27;ve missed XYZ edge case.&quot; And you basically have this back and forth via files on disk. One writes the markdown, the other reads it. And you iterate until both agree, and then once you kind of reach that kind of condition, then you actually start building.</p>
+              <p>And then the evaluator kind of grades against the contract that those two agents have decided between themselves, not the original spec which the planner is kind of one-shoted at the beginning. And why this matters, as it kind of bridges this kind of idea of kind of user stories, i.e. the spec, and kind of converts it into slightly more tangible, testable kind of assertions, some sort of contract, without the planner having to overspecify kind of upfront. And I think this is kind of the key innovation that the Ralph loop never really had. It had a kind of fixed plan, dot MD style kind of thing, but nobody on the other side is necessarily arguing with kind of the main loop.</p>
+              <p>And again, it comes back to like having these separate context windows and adversarial pressure. So let me show you an example of a very simple prompt that we had in a solo kind of loop versus the harness that we just discussed. So the prompt was basically. Build a retro game maker, and that was it. And I&#x27;m not, you know, gonna gonna try and convince you that this is like necessarily the most.</p>
+              <p>Cost-effective or most efficient way to try and build an app, as you can see one it takes at the moment an extremely long amount of time, two it&#x27;s very expensive, but also as we&#x27;ll see in a second a lot of the stuff actually starts working only with this harness when it didn&#x27;t in a kind of a solo loop, so. This is what it kind of looked like the opening screen at least when we didn&#x27;t have the harness, pretty simplistic, a little bit boring, but it still looks nice, right? If this were the whole app, you chip it, but it&#x27;s kind of the bait, I guess, if you will. This was kind of the sprite editor, if you will. Again, still looks fine.</p>
+              <p>The canvas is there, the palette, the frame timeline, live preview, maybe it&#x27;s a little bit cramped, and the color picker is just black swatches. But it kind of works. Clearly, the agent like actually did understand what it was trying to do. Um, and then the one thing that actually has to do, um, which is play mode, entities rendered, score, health, all the other things which go into an actual game. Pressing an arrow key, does nothing.</p>
+              <p>Pressing a space key, did nothing. Um, the agent really didn&#x27;t have any idea, um, how to test itself, what it actually meant to play a game and actually succeed, um. And, yeah, this is kind of the same prompt, same model, and this is kind of the the breaking point. It kind of looks done on the surface, but when you try and actually push it to its limits, it just, it just kind of failed. And then if we ran the same prompt with the same model, this is kind of what it looked like when we ran the harness.</p>
+              <p>So this was about yeah, two hundred bucks, six hours. First up, it decided to name itself Retro Forge. It decided to like create a new project dialogue, have a very nice canvas. None of that was in our prompt. So this is all the planner deciding like, okay, here&#x27;s what the product decisions should look like, and then you know the two other agent deciding, right, how am I going to test this.</p>
+              <p>If we look at the sprite editor, we have kind of a full fifty four color palette, the kind of eight bit preset from the project dialog flowing through. You see the sprite at actual game scale. It&#x27;s a lot more complete as a product in general. We had a whole new kind of. AI level assistant.</p>
+              <p>This is where it kind of started to get recursive. The planner had decided like, right, we should have some AI features, which is just a vague line in the spec, and the harness turned that into a full AI level assistant inside the app that it was building. So you know someone could come in and say, hey, create a castle with sprites guarding it. Let&#x27;s say, this is something which the solo run would never even attempted to look at. Without the planner, that phrase just becomes, never even comes, becomes like a work item to look at.</p>
+              <p>Then finally, I guess, the actual results kind of applied, so. Play mode, you know you have this whole debug HUD in the top left, which you can clearly tell is to make life easier for the evaluator. For example, those numbers are live, the physics loop is actually running, arrow keys work, the player moves, collide with castle walls, because the evaluator actually launched the game, tried to play it, knew necessarily like what. What features need to be tested to make this game kind of real and successful, and the difference between this output and you know the previous output is entirely just scaffolding, and it&#x27;s a very simple loop ultimately, but the results are quite startlingly different at least. And so, in case you&#x27;re curious, the kind of things which the evaluator, did catch, are pretty basic kind of stuff.</p>
+              <p>It&#x27;s things like. You know fast API route ordering, passes every unit test but might actually break in prod. The evaluator catching things like the delete key, having some kind of boolean logic bug. Again, these are things which were only caught because the evaluator is actually using the app. It&#x27;s things which might get through CI in a Ralph loop, but this isn&#x27;t you know that level of specificity isn&#x27;t something which happened by accident.</p>
+              <p>And so, this is the kind of level of detail which these models are kind of going to at this point in time. So we talked about the kind of contracts that the generator and the evaluator would write between themselves. For this app, it decided that there were twenty-seven contract criteria. That&#x27;s a level of granularity which we found you know that you really need to make findings kind of actionable. If you have vague criteria, you have vague critiques.</p>
+              <p>The generator just kind of shrugs and does things, whereas if you have granular criteria, the agent knows. Okay, I need to fix this exact line. What&#x27;s kind of interesting, I thought you know, and I want to be honest about this part is that out the box, Claude is a really really bad just general QA agent. Andrew talked about this a little bit in his bit, right, but. The same kind of sufficiency and generosity bias that everyone hits with general Adam as a judge systems also applies here.</p>
+              <p>Most of the time in early runs, it would you know the QA agent would kind of find a bug, and be like, &quot;Ah, fix it later might take two weeks,&quot; and then just kind of like be done with it. So we actually have to spend an exorbitant amount of time like going through, trying to tune you know small layout bugs, edge cases, and and kind of feeding that into the prompts. I wish there was some kind of secret to actually doing this, but realistically the whole, kind of art to building this system and making it good was kind of reading the traces. The primary debugging loop was this: and not necessarily running more experiments, it was reading what the agent actually did, finding where its judgment diverged from ours as humans, and then tuning the prompt for that. It was the same kind of muscle as reading kind of a stack trace.</p>
+              <p>One kind of tooling tip that we had was kind of piping agent transcripts into files, kind of grabbing them with another agent or having another agent kind of go through them, and then kind of update the prompts itself. So you have some sort of like closing the loop even on just like building this harness out. So, the last thing I kind of wanted to talk about was how to think about adjusting your harness as these models kind of get better in time. I think there&#x27;s a lot of like discussion around whether harness design is kind of dead or not, especially where you know models at. I mean, when I wrote this, it was just Open Source four point six, but even like Mythos, you know, level level models, and.</p>
+              <p>I think the key thing that we note noted is it&#x27;s really important to get a feel for what the kind of spiky behaviors of any individual model are, and then trying to adapt your harness to kind of fill fill the gaps. So. Andrew talked about this a bit, but you know context resetting between sessions. We kind of drop that entirely. Opus four point five, you start really bad kind of context anxiety.</p>
+              <p>Whereas Opus four point six just you know, didn&#x27;t um as part of the part of post training there, and so one continuous session in compaction was was more than more than enough to handle very long sessions. Sprint decomposition, we didn&#x27;t have a very strong opinion on this, but it was something which was really really critical to getting Opus four point five to work, but. OPUS four point six was able to kind of hold a two hour continuous build, coherently in a way without Nasty having to be forced fed one feature at a time. The cadence at which the evaluator should run. Previously, we were running at every single sprint per se, whereas now we were just running at the end of a one-shot generation from the model and then passing back.</p>
+              <p>So the harness is still the same, we&#x27;re just kind of simplifying the specific kind of loops and the kind of recipe that kind of goes into it. The lesson isn&#x27;t necessarily our harness was wrong, but rather. It was right for four point five. The frontier moved, and we ran a simplified version to see how it worked. So this is kind of what the final kind of setup kind of looks like today.</p>
+              <p>Having that planner generator evaluate a loop is still the kind of core of our system, but you can see we kind of ditched a bunch of the other kind of. Kind of components that made this slightly more complicated than it had to be. We also, as kind of mentioned, big fan of just using a file system for shared state, instead of kind of leaning on context windows for very long running agents in general. And this is an example of the simplified harness running, with one of our latest models. Again, very very expensive, but you can see it&#x27;s actually roughly like half the cost of the previous runs, just because we&#x27;re kind of doing things in a slightly more simplified manner, but it&#x27;s still running over a very extended period of time.</p>
+              <p>And so, this is an example of a DAW, which is basically just like a music creating app, if you will. The agent sets the tempo, it key, it lays down the melody, it builds the drum tracks. This is the evaluator actually going and testing the app itself. We did actually listen to like the music in this. Obviously, Claude, can&#x27;t hear at the moment, and so the music was pretty trash.</p>
+              <p>But, the app was really good in general and pretty pretty fleshed out, which you know. A model ago, this is something which would never have worked, but this is something which was possible with just a couple rounds, and this is kind of that that meet a curve which Andrew was talking about, kind of really in in action. And so I kind of wanted to close just by saying. You don&#x27;t naturally need you know our internal harness to to go in and start thinking about this. We are constantly trying to ship bits of you know these primitives into code directly, but also there&#x27;s nothing stopping you from just going ahead and building something similar to this, kind of on your own.</p>
+              <p>So we just shipped you know auto mode is probably my favorite thing, for slightly more you know safe safe yellow if you will, instead of running dangerously skip permissions all the time. We already have custom sub agents as a primitive. Right, your evaluator, your QA role, give it a harsh system prompt and a very detailed rebrake. Playwright MTP or ColdFusion Chrome MTP, already extremely extremely good at web app stuff, or just use Compute Use if you&#x27;re building kind of native apps, and skills again, a very nice way to package your kind of grading rubrics into your kind of general development flow. So yeah, five things if you&#x27;re kind of taking a photo.</p>
+              <p>This is the the slide I would say to to kind of remember: self evaluation, very much a trap, just use an adversarial evaluator. Compaction, doesn&#x27;t naturally does not equal kind of coherence. Right? Lossy summaries really drift. Structured handoffs and clean contexts are a very good pattern that we&#x27;ve seen.</p>
+              <p>Don&#x27;t think that subjective quality isn&#x27;t gradable. If you have a strong view on what something should look like, then kind of force yourself to write it down. We found this made kind of a really massive difference to the quality of kind of apps that a model was able to generate, and then kind of finally was really just you know. Sit with the model, read the traces. Only then can you kind of really know what bits of a scaffold to delete, what bits to keep, especially as the kind of frontier moves.</p>
+              <p>But yeah, that&#x27;s it from me. Thank you very much for listening. And yeah, check out our blog post. But wanted to just open up for Q and A in general because we&#x27;ve been yapping for like closer than an hour now. So if you have any questions for me, Andrew, just fire away.</p>
+              <p>We&#x27;ll do our best to try and answer them. Yeah. Thank you, Johan from Poleside. One question for you: When you improve the evaluator by like reading the logs and improving it, is that sort of like on a per project basis or more of a secret source that you reuse across project? The goal, the goal was very much to try and do this in a way which was reusable, right?</p>
+              <p>Like I think anyone can do this in a way that&#x27;s that&#x27;s creating you know a very specific type of app that&#x27;s fine. At that point, it&#x27;s not that different from you know going ahead and just prompting code yourself and doing it, right? I think there were just the the key was like one of the common patterns that you can kind of draw across, the model weak points, right? So, talking to that kind of front end design piece, we knew like. What we thought good design would be right?</p>
+              <p>You could give examples like, this is what you know um a really beautiful product looks like, this is what AI slop looks like right, and that generalizes quite well. So, yeah, this was all around web apps, but it could quite easily apply to to other kind of things as well. Thanks for. Oh, test, ah yeah, ah. Thank you for presentation.</p>
+              <p>Very interesting. I was just wondering, what is your view on concept of damp zone and smart zone of a model? So I understand like before it was around forty percent. Now with one million context, it&#x27;s about hundred k. Is what I understand.</p>
+              <p>And way how understood Ralph, Ralph loop was designed is to kind of negotiate this problem. So basically we keeping the model always in a smart zone. So basically trying to. Slice task below one hundred, so it execute the task within one hundred context zone. And what I understand from your presentation, you can like advocating not to use it anymore, because we can now rely on a compaction, and so on.</p>
+              <p>Is it like something you suggest thing to do, or with steel, with like a Ralph, loop model still has its own place given the smart and dumb zone, concept. Yeah, well I suppose from Asha&#x27;s presentation, and mine you see that the one million context window is now GA, and so you have sort of a bigger context to use. The models are more agentic, so they can sort of maintain coherence for a longer period of time within that context window. And that actually with the release of four point six we decided to move from new context windows to just a single long running continuous session with compaction. So I think I mean the, whether or not you use multiple fresh sessions or just one long running one is probably still up to your use case and your evals, depending on what you&#x27;re seeing is working best.</p>
+              <p>But at least for sort of this general purpose. Generator evaluator pattern with Opus four point six, we saw that it was possible to use a single session. I don&#x27;t know if you want to add. I think it&#x27;s also just like a temporary problem, right? Like, context rots.</p>
+              <p>Is, you know, a failing of like today&#x27;s models to some extent, and much less so than you know even just one model generation ago. So, is there a place for for you know the type of thing which you&#x27;re discussing? I think, yes, depending on use case, but you know it&#x27;s not like a. It&#x27;s one of those pieces which I&#x27;d look at as like okay. As soon you know, I&#x27;d be I&#x27;d be kind of hunting for the model release where I can kind of strip it out.</p>
+              <p>Let&#x27;s put it that way. I always have a lot of FOMO around playwright. I mean, you said playwright MCP with playwright skills. Can you speak to how to improve the playwright? Because like I imagine I would like to like have my browser open, and then I can see the model working through it, and then maybe I could steer it.</p>
+              <p>You know, the few tabs open. But like yeah, what is there some innovation there I&#x27;m missing out on, or is is playwright MCP really? Would you recommend people use? I mean playwright MCP or just use the Claude for Chrome MCP, which is like a slightly more. Robust, thing I guess around browser control.</p>
+              <p>I mean, I don&#x27;t know why you want to watch it do things. I mean, you can, but I think that&#x27;s like a trust gap right today. Like you know, the whole point of what we try to get to do here is like. You set something off, you trust it to do it, do the work, and test it, and you have the confidence that it&#x27;s doing it correctly, and you come back to it. And that&#x27;s where you know yes, there&#x27;s going to be some iteration at the beginning where you&#x27;re like watching reading the traces until you get to a point you can trust it, but, at least internally, right like when I&#x27;m when I&#x27;m doing full stack outdev.</p>
+              <p>I have got to a point now where I&#x27;m like, okay, with Opus four point six, I can like reliably trust the model to go ahead, read. Network errors, control errors. Actually, navigating up, zoom in where it needs to. The vision is now good enough on these models that it can like identify overlapping text on elements and things like that. Whereas that just wasn&#x27;t the case until realistically the last, you know, generation models.</p>
+              <p>So, yeah, I would I would recommend. I&#x27;m curious. Like with the generator evaluator pattern, what happens? Do you can you throw unlimited tokens at it, or will it stop because the evaluator is not good enough? Like.</p>
+              <p>You tell me more about that. Sorry, do you mind clarifying? I kind of messed up again. Yeah, so okay, let&#x27;s say um, I say okay, create like a very cool game um with some features. Have the generator evaluator pattern, that creates like contracts, builds the apps.</p>
+              <p>If I. Then it will give me back something, right? Can I restart it again and say like, okay, make it better. I&#x27;m not happy about it, and generate the evaluator. Pick the pattern, will pick it up and make it better, or will the evaluator, not good at one point and just say like, this is it.</p>
+              <p>Um, I think that&#x27;s. I mean, one first of all, like if you want like some some level of human in the loop in this process, that&#x27;s that&#x27;s like you know, implement hooks at some point, some point in this in this loop, um. I think the bit which was kind of surprising to us, was with this, this general pattern and especially with the kind of four point six liner models, both Sonar and Opus, it was extremely willing to like throw away, everything you know even for done kind of ten passes at something. It was kind of very happy to just like throw it all away and start from scratch, if for some reason it wasn&#x27;t able to like hill climb against a rubric of the evaluator in a kind of effective way, and so. That&#x27;s why kind of when we&#x27;re kind of when we were playing with this kind of thing, we didn&#x27;t naturally like lean towards having.</p>
+              <p>Some kind of resume or human the loop, type, intervention system I guess, and we didn&#x27;t really observe. We expected to, but we didn&#x27;t really observe, that kind of behavior which you are talking about. Where it kind of just like, aviators like, I just give up. Let&#x27;s just like pass it on, shall we say. Yeah, it was just much more willing to like throw away everything and restart, and that was just the behavior which we never saw when it was the generator itself when we&#x27;re kind of being proud of its own work and being like, I&#x27;m not going to restart this whole thing, so.</p>
+              <p>Yeah, I mean, there&#x27;s been an example which I&#x27;ve seen where the evaluator is like, it kind of gets fed up and is like, right, this approach you&#x27;re taking just obviously isn&#x27;t working. Can you just like delete everything and restart? Which I don&#x27;t know about you guys, but vik coding regularly, I often I often do, as a human to like you know just benefit from fresh context windows, not have to deal with an already messy code base, et cetera. So it&#x27;s quite neat seeing models now also kind of get to that point. I&#x27;d also just briefly add.</p>
+              <p>Obviously, you can then open that code base in Claude Code and continue where you left off. Sort of goes that way, and I think we&#x27;re generally thinking about what the workflow looks like if it&#x27;s sort of more back and forth, because it&#x27;s sort of the extreme of build me a really complex gaming application that you don&#x27;t know is going to take three hours, is going to take twenty hours, it&#x27;s a bit unclear. So maybe there&#x27;s sort of something in the middle that&#x27;s like more of a, yeah, feedback loop. I um I really like the idea that you have of like, you know there&#x27;s a there&#x27;s a human element here, where it&#x27;s like you know PM engineer, evaluator. Um, the role is a lot of the time it&#x27;s like scope creep and keeping the time going and stuff like that.</p>
+              <p>You&#x27;re just like letting this off. You&#x27;re letting engineers go play in the sandbox for ages. Is there a harness loop that needs to go back to the planner eventually? Does it need to move again? Well, maybe because we&#x27;re engineers, we just decided like, ah, screw the PM, we&#x27;ll just shove it to the side.</p>
+              <p>We actually, well, this is where the kind of like that kind of contracting piece between the the kind of. Evaluator and the builder worked quite well. For context in that, we typically like insert the main spec that was generated by like the PM per se into those sessions regularly, so that you know it&#x27;s always a reference point for like okay, this is what we&#x27;re still actually trying to build. And the main function of then the builder and the generator, sorry the builder and the evaluator, is just to like figure out. The exact feature set and tests and contracts per se that actually satisfy that spec, but.</p>
+              <p>The reason we don&#x27;t is because, we don&#x27;t want the planner to be, like a core part of this loop. It should be very high level. It should its purpose, really is just kind of. Set out like kind of the hard outer lines of what this product could could be, but its job is not necessarily to come in and intervene and be like, actually, this is like an impossible feature we should not do this and and edit itself. We kind of wanted to.</p>
+              <p>Keep that context relationship between just ah just the builder and the generator. That being said, like this loop, I&#x27;ve applied it in lots different ways. It doesn&#x27;t have to just be you know one generator one builder, right? Like that adversarial kind of tradeoff can be applied to like a workflow consisting of multiple separate agents, right? I don&#x27;t know.</p>
+              <p>It could, if you&#x27;re trying to do, I don&#x27;t know, generate evals. Let&#x27;s say you could use a similar harness to be like, hey, generate a. It could be like, planner, generator synthetic a generator for synthetic data set right, with a QA agent, then hand off to, like an integrator which like actually wires up something, also has a QA agent, then has like a final kind of a. You can basically add this kind of generator evaluator thing into a multi step workflow. We each like build a maybe has like a slightly different function per se as part of a longer workflow so.</p>
+              <p>There are different ways in which you kind of keep things on track depending on the task, and break down, this general pattern into slightly more specified. You know, tasks or workflows if that makes sense. Can you you mentioned that some of the later tasks could not possibly be done by an earlier model? Can you talk a little bit about your process comparing the tasks on the different models? Like do you fire off the same task on Opus four point six, Opus four point five, Sonet.</p>
+              <p>Or is this sort of artisanal, co-evolving harness model, set up, obviating that. Yeah, I mean, I suppose we walk through the history a little bit, and if you look at say the first blog post on long running agents versus the more recent one, there are some pretty significant differences there. You know, one being what we were just discussing that the initializer agent would build this super comprehensive spec of say two hundred different features, and then in. Then the loop would have to actually go and execute against every single one of those features, which may lead to say incorrect design decisions. But it&#x27;s sort of forced into that behavior, whereas.</p>
+              <p>I think now, you&#x27;re able to have sort of a more generic creative direction set, with say Opus four point six, and then just having this this loop of the generator evaluator. But it does yeah, your model selection does inform your harness design very much so. Of course, in a perfect world, you could just sort of throw everything and say, &quot;Oh, it&#x27;s four point six.&quot; But if you have cost concerns. For example, maybe you do use Opus four point six for planning and then Sonnet four point six for for the coding or the execution, that&#x27;s something that we we tend to see quite frequently. But again, if you&#x27;re building specific sub agents for each of these, you probably want to have some evaluations to be able to understand for that model and that prompt how it&#x27;s performing against that task and then just optimize.</p>
+              <p>Do you have any advice on moving beyond sort of these one shot applications to long live products where you&#x27;re looking to make changes days, weeks later? And what sort of artifacts you need to persist to future instances to be able to know what has come before, what can I change, what should I change? Yeah, it&#x27;s something which we&#x27;re working on. Like right now, like we use like similar patterns for just a bunch of random stuff internally, shall we say, and so, at the moment it&#x27;s like set this thing off, it&#x27;s running you know, um on a remote server somewhere, um I&#x27;ll just come back and check it like after this talk let&#x27;s say, and, then I kind of iterate on it kind of manually in code directly like polish any rough edges that kind of thing, I think. In terms of the way that you&#x27;re actually like setting up this harness, just having, um, this is why we kind of default kind of using a file system of states, for this kind of loop, one because it&#x27;s just very easy for another model to come up and and grep through and and pick up what what&#x27;s been going, but.</p>
+              <p>One thing which I like to do is kind of embed little bits of prompting throughout this kind of loop, which basically tells it to write kind of learnings and states to some kind of JSON file because the model doesn&#x27;t kind of overwrite that too much. And so, the nice thing about that is you&#x27;re basically just leaving like breadcrumbs for another model to come and pick up. So. Honestly, the the key thing for me is like how do I, instruct this this harness to leave crumbs for, a human to come in and then use code on top of. So, generally it&#x27;s like hey, the shape of that file might be like, tried this, evaluator found this bug, implemented this fix, this fix worked yes tick, and then continue and you have kind of like a timestamp, kind of.</p>
+              <p>Time log, if you will, of like everything the model has tried, the fixes made, and the final state, um, and then also, having some sort of. Live updating kind of set of docs, if you will, just very high level. Here&#x27;s the file structure, and then those two files. To be honest, are more than enough for Claude code and a human to come in and start iterating on that up with, but. That&#x27;s all we&#x27;re doing at the moment.</p>
+              <p>Perfect. So it&#x27;s very interesting to hear the. Oh yeah, first of all, congrats on the presentation. And then, I was wondering there are kind of two approaches. Like you have the agent team, where multiple agents interact with each other, and then the explicit generator critic, setup.</p>
+              <p>But whatever, Ali. Because in sense like the agent team, has the same setup where the main agent instructs someone and then, can act as a critic for the sub agent, but what are the current failure modes. That causes us to still need the specific, generator critic harness instead of just, the agent, team, self. And then, what&#x27;s your estimate of how many model generations we would need to just. Completely rely on the agent team.</p>
+              <p>Maybe. I can I can sort of address the first aspect of that. So. I mean, one of the limitation of, firstly, Clod code is using the same harness that that is the Agent SDK. So you can technically you should be able to build this type of pattern into Clod code.</p>
+              <p>Agent Teams is a useful framework for potentially doing that because. You could say have the the generator and the evaluator sort of intercommunicating, or maybe it&#x27;s the generator is sort of the main agent and and the evaluator is. Say a member of of the agent team, um, but I think it&#x27;s it sort of evolved more so from that first blog post that I showed. I think that was like the the result of that to some extent to try and make that more generally available, but one of the things you&#x27;re limited by obviously is. The cloud code would just have to run on your machine.</p>
+              <p>Think with the agent SDK, you can also just run it in more of a cloud environment and a sandbox environment for long periods of time and without it failing or you having to run the caffeinate on your machine. But I think yeah, Claude code is a good testing ground for building out any of these types of harnesses, to experiment and explore and see what works before maybe you build it into the agent SDK and then actually deploy it as its own application. And yeah, I mean again, I would just experiment, see if agent teams is something that makes sense for you, or if maybe just using regular sub agents or some other framing of it, it works better. But yeah, I think people are using agent teams like a ton. I don&#x27;t know if.</p>
+              <p>Yeah, well this is the thing is like I don&#x27;t think we have like a super strongly opinion viewpoint on like. What is the best at any you know set up at any given moment in time? So I borrows always like updates his tweets like this is what I&#x27;m doing now, like Agent Teams was something which, a bunch of people loved internally, and so we were like okay let&#x27;s ship it let&#x27;s see what people think about it in the field, I&#x27;m not saying we will but you know we regularly on ship things as well, and I do see the generator evaluator. Kind of pattern is like a subset of that like team&#x27;s approach to thinking about subagent design, not necessarily like contradictory to a per se. You know you can imagine like you know.</p>
+              <p>Classic way in which teams breaks down is like you know front end back end, some sort of integrator between them like sub agents. Each of those probably deserve their own kind of critic, kind of agent pairing with them. For example, so you can kind of see how the two concepts like overlap. Just the general idea behind this is. You know most people when they&#x27;re running Claude code, at the moment their goal isn&#x27;t to like one shot an app over like six hours, and so that isn&#x27;t necessarily primitive which we like by default like ship, there, so yeah.</p>
+              <p>Yeah, sorry. One thing I was wondering: Have you also tried like a critic that gets the context of the generator? Then you feel like if it has some clue about the traces of the agent or like the executor. Yeah. Is that currently the case?</p>
+              <p>And the the critic. We we use like a handoff pan. I I would be very hesitant of that. We did try this, but this is the whole like muddying of. Of, like thoughts between the two, two model streams.</p>
+              <p>I think it&#x27;s actually much more effective to just let it judge the output, and just provide. Instead of being like, &quot;Hey, you made a misstep when building this by doing x,&quot; and that&#x27;s what resulted in this issue, it&#x27;s much more effective to just have the value to be like, &quot;This is an issue,&quot; and then let the generator purely reflect on its own work and then try and figure out how to fix that issue. Otherwise, you kind of just see, we found that. It&#x27;s very easy for the model to like kid itself that something is working or not, and that feed into the evaluator as well. Lost note on that.</p>
+              <p>I think it would then be interesting if you, for the training team, if you could train like the the generator to predict what a critic currently said. Yeah, like to to have it be more honest about what it did and stuff. Maybe we&#x27;ll work on that. I want, I want to ask more about traceability. Like I use superpowers or like my own prompts to generate like multiple sub agents to implement my let&#x27;s say my software app.</p>
+              <p>But what happens is like, I don&#x27;t really know. I want to go back and see where it actually went wrong, even. But then I&#x27;m not able to figure out, how to find those traces. How what do you use for traceability? Is my question.</p>
+              <p>When you have so many like five six agents running in background, like, yeah. Um. To be honest, a lot of us just reading through traces by hand. We do a lot of that. I would say anthropic in general, just like reading through traces by hand.</p>
+              <p>We also just like have you know hacked together various things where we, you know, point clods at a bunch of traces, with some custom prompts to try and identify like, issues with the loop like this is where it veered off and whatnot. We kind of use that as like a first pass I would say maybe to just kind of like. See where something where, where like where something might have gone wrong, but to be honest by far in the way the the best approach at least that we use in Tanya is just just reading reading the traces by hand, um, only then do you kind of like truly get to kind of relate to what the model is trying to actually do, um, yeah. Thanks for the talk. I have a few questions.</p>
+              <p>First of all, how do you measure the quality of a harness agent pair? Is it it feels like a vibe check, like it&#x27;s a green field. Let&#x27;s build an app. But let&#x27;s say you&#x27;re you&#x27;re going into a new project, maybe brown field. It feels like a vibe check or some kind of art.</p>
+              <p>Can you make it more scientific, or is that just not feasible? I mean, the way that we&#x27;ve thought about it at least, right, is like we specify the rubrics in kind of extreme detail, at the kind of generator and evaluator level, right? So we talked about, for example, those four kind of criteria. That&#x27;s very high level. The rubric which we use for like design taste, let&#x27;s say, and so.</p>
+              <p>We set those up for various bits of this app, right? So that can be just for the design element, maybe another piece for like how we think about kind of API design. Let&#x27;s say. Code quality, whatever, and we kind of use those as the, kind of, various sort of rubric to try to hill climb against. Right, and then the evaluator&#x27;s, job is to you know encourage the builder to hill climb against those.</p>
+              <p>And so, for any given app or output, we have like a signal of this is where the model started on those those kind of. Criteria and this is where we&#x27;ve kind of ended at. Now, that&#x27;s less useful for like kind of like you said working on, kind of newer code bases, but it still applies, right? Like you could point, you just have to start the loop in a different way. You would just point the evaluator at a given code base.</p>
+              <p>And be like, this is where we are now, and then give it the the spec of what you&#x27;re trying to achieve, and then let the loop kind of iterate against those kind of criteria. So it&#x27;s not like necessarily a one set of evals at the very end. It&#x27;s kind of like. Here are the criteria for what we think good looks like. Then letting the evaluator and the generator come up with a set of kind of tests, or contracts that need to satisfy, and then letting it just as the harness hill climb against those.</p>
+              <p>That&#x27;s not super comparable across different products and runs, but it&#x27;s it&#x27;s very useful for for yeah within a product or run. Also this um. This particular pattern is it&#x27;s great for greenfield like you said, but it&#x27;s quite opinionated. You know, it might be using React like PostgreS as database, a node on the back end, but your brownfield app might be using something totally different. Or the rubric that we&#x27;ve created for what we think you know good sort of design patterns are, would might be totally different in your project.</p>
+              <p>So I think that&#x27;s why we&#x27;re proposing this as more of a pattern that you would then tailor towards you know your application. Thanks. One follow-up question. Does it work? Yeah.</p>
+              <p>Do you use, do you like direct the harness individually and how do you cooperate as a team on that? I find it&#x27;s very hard to like, when I share my screen and I&#x27;m working conversationally, it&#x27;s very hard for people to keep up, and the other way around I find it cumbersome to dictate what to prompt. How do you cooperate as a team? Do you have like team owned harnesses? Um.</p>
+              <p>Is it maybe a good feature for cloud code? Um. Yeah maybe maybe I think we we probably do have work to do on that right like I think like, um. Quite often what happens in turn is like you know people come up with these ideas and then they&#x27;re generally quite bottoms up adopted by different teams and, um it&#x27;s then the job of the kind of original you know, idea holder shall we say which was Pithvi in this case to kind of maintain it and make it kind of. Composable and generalizable for different teams, and different teams will, adapt it and you know, make it useful for like their section of a codebase.</p>
+              <p>Let&#x27;s say, but we don&#x27;t have any like, good things in that sense. I think like you know even just observability like some other people talked about right is like a, um. Generally speaking, a thing which is not fully solved yet for these like ultra long running, agents, and, yeah, interesting area of kind of Greenfield. Software to explore. Yeah, that is that is an interesting one.</p>
+              <p>Whether it should be sort of a collaborative experience in in Claude code or even Claude AI, I think in, just leveraging software engineering best practices with version control and, make your commits and pull requests or if you&#x27;re working, on your own using something like Git work trees so that you&#x27;re not overriding the the file system, on multiple different features. All make sense, but, yeah, I think when it comes to collaboration, maybe it&#x27;s something that you know doesn&#x27;t happen quite as much because people just build these projects as Ash said from the ground up and then sort of you know present them to the rest of the company. Hi, Jose from Mercedes-Benz Research and Development. Here, hi, thanks for the talk. While looking at it, I thought, okay, it looks a lot like a scrum team, a feature team working for longer times on a product, and I was thinking, how does Human in the Loop look like in that scenario?</p>
+              <p>Because you have. You had this kind of sprint. Have you thought about a sprint review? Kind of moment where where you as a human get asked, Oh, hey, here&#x27;s what we built the last two hours. Yeah, how&#x27;s it looking like for you?</p>
+              <p>Yeah, should we subject our agents the same trauma that like engineers go through, of, of, of scrum review. I mean, like the whole point of this general the general idea which behind this talk and also, what we&#x27;re trying to do is like trying to be as like AI-pilled as possible, right? Like, how do we build harnesses where we don&#x27;t need a human in the loop, right? Like, what does that look like? Are we using this today for everything?</p>
+              <p>Obviously not, right? But the goal is. You know this is this is a technique or a pattern which, should extend very nicely such that you you don&#x27;t have a human loop for most things. If you did right, it&#x27;s like, you know, hooks is probably the main primitive to just basically inject. Given some sort of specific type of stop condition, let&#x27;s say with an evaluator, to basically like hand back to human, allow some kind of developer message input, and then continue the loop, would be like kind of the simple way to implement it.</p>
+              <p>But, yeah, to be honest, we&#x27;re kind of exploring this from a. What can we do fully autonomously? Kind of approach, as opposed to thinking this as like, here&#x27;s cold code and and like, how do we make this like you know more powerful per se? It&#x27;s very much like a kind of more greenfield exploration of agent design. No, of course it&#x27;s just like, if if if I would get the chance to review it maybe a few hours in.</p>
+              <p>And I might be able to steer it in a way better way, so that eight hours later it&#x27;s more like the one kind of project that I would like to have. Yeah, I mean. I get what you&#x27;re saying. I think the question then is: Is like should that be like a permanent feature of the harness, or is that just like a a thing which you should have like kind of basically prompted around when building the harness? Right?</p>
+              <p>So, we would have that right. We would run this this this harness on loop, and we would have you know we might spin up like ten generations different things, and like three of them succeed and seven of them fail in like random ways. And then we would just sit down with those seven, read through them, adjust the prompting of the main harness, and then and then try again, and then until we get to a point where we&#x27;re like quite happy leaving it running, leaving it to run fully autonomously. So ultimately, that&#x27;s still the end goal for us, as opposed to being like. Basically, giving up on the harness and being like, &quot;Okay, we&#x27;ll just insert a human hair to like cover for any kind of sterility issues and stuff,&quot; but rather, embed that and bake that into the harness itself, in the first place.</p>
+              <p>Have you used this to build anything like sort of like non greenfield or I guess like production like anything in code itself or have you used it for actual features and seeing it to the end? I think I mean this does mostly extend to greenfield projects. I think for brownfield maybe you do need a little bit more control as you&#x27;re starting to build out your own rubrics and patterns. I mean, what we&#x27;re seeing, in Brownfield, is that if you look at the whole software development life cycles, not just the coding aspects, that people are starting to use something like Claude Code for. It might be say there&#x27;s like autonomous monitoring happen happening, and then that could feed into say, generating some kind of.</p>
+              <p>Like issue or or feature request that could then just feed into, an agent that would then go through to make the pull request, and then there&#x27;s sort of a pull review. Already happening, that maybe you&#x27;re just reviewing that before you actually emerge. So I think there there are other ways to automate the whole software development lifecycle, in a brownfield project. But I think this particular pattern maybe, without a lot of testing within your project and building like customizing it, for your project, it&#x27;s probably more suited towards brand new applications. Have you built any greenfield apps that like I don&#x27;t know like an internal tooling or anything like that that you&#x27;ve been using like not just a demo sort of like.</p>
+              <p>Yeah, to be frank, I can&#x27;t really like talk to like Intel Turing too much. But a good anecdote of this was, um. Like a lot of the the new and fun stuff that you see in code, code will will like, um, when I&#x27;m speaking to team and working with them on stuff. Use a lot of the lessons from this per se. Like in in like even just general hands on.</p>
+              <p>Called code usage, the way that they prompt you know the main model to to spin up a sub agent that say and and and go off to something, or as kind of Andrew said right in kind of. Monitoring and bug fixing loops like you know when generating a fix like, should you have a separate evaluator and a generator go after the same thing, so a lot of these principles apply. Um, is it like you know one for one this, maybe not, but it&#x27;s like taking, the good bits of this or whatever you think is is kind of applicable to a certain space and field and then, kind of running with it in your own way. 哎。 You say reading the traces. Is that literally just like the raw output, or is there something more specific?</p>
+              <p>You&#x27;ve prompted it to like write this to file. These are the sorts of things I care about and I want to see. No, you got to read the whole thing. Read the whole thing. I do think it&#x27;s like a really important skill when building agents in general, is to like.</p>
+              <p>Empathize as much with the model. This was like there&#x27;s an interesting, anecdote which we used when we were building, for example, the agent harness for Claude for Chrome, which is our kind of browser use thing. And, we would run this like experiment where like imagine if you know you were trying to navigate a web page and click around, where like you know you were effectively doing with your eyes closed and like every ten seconds you just opened it to see like a static page, and then closed it again and then had to like do things, and like really putting yourself in the shoes of the model. Is kind of like, there&#x27;s kind of empathetic skill set which you need to develop, and the only way to really do that is to like, spend as much time with these models, but also, yeah, reading through line by line, being like, oh why did it think this, oh I can kind of see why I did that, and then kind of adjusting the way you instruct it next time to to do better, um. But that&#x27;s why I think Code of Crime is very good.</p>
+              <p>Was just really just like spending a lot of time as a team, closing our eyes and trying to navigate web pages for example. So, yeah. Yeah, and I think, then actually taking those learnings and putting them into, say, your prompt templates or your Claude MD or building a scale or just generally understanding how to sort of avoid that type of behavior in the future. I know Claude code now has auto memory for sessions as well, so sort of constantly memorizing little things as it goes. But yeah, you can learn quite quickly from reading some traces like where things might be going wrong.</p>
+              <p>Cool. Should we wrap up there? I think we have a few minutes left, but we&#x27;ll be around in general in case you guys want to ask any questions or just chat. But otherwise, thanks for coming down. That&#x27;s such a good day.</p>
+            </div>
+          </details>
+        </section>
+      </main>
+
+      <aside class="context-rail" aria-label="Secondary context">
+        <section>
+          <strong>Source</strong>
+          <p><a href="https://www.youtube.com/watch?v=mR-WAvEPRwE">YouTube video</a></p>
+          <p>Transcript file: <a href="youtube-mr-waveprwe.md">youtube-mr-waveprwe.md</a></p>
+        </section>
+        <section>
+          <strong>Inferred title</strong>
+          <p>Anthropic Workshop: Build Agents That Run for Hours — Ash Prabaker &amp; Andrew Wilson.</p>
+        </section>
+        <section>
+          <strong>Practical themes</strong>
+          <p>Fresh contexts, durable state files, evaluator loops, trace reading, and greenfield-first autonomous builds.</p>
+        </section>
+        <section>
+          <strong>Caveats</strong>
+          <p>The Q&amp;A section is noisier than the main talk, and some model/version names may reflect ASR imperfections rather than official release text.</p>
+        </section>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>

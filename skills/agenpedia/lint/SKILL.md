@@ -95,7 +95,26 @@ structural checks.
 **Report only** — flag contradictions for the human to review. Do not
 auto-fix contradictions.
 
-### 6. Stale Information
+### 6. Undercompressed Syntheses
+
+Inspect `type: synthesis` pages, prioritizing any page created or
+updated in the current run when lint follows `ingest` or
+`ingest-batch`. Compare the synthesis against its cited raw sources or
+cited wiki pages when available.
+
+Flag pages that:
+- collapse materially different arguments into a short recap
+- omit reusable checklists, matrices, process steps, or distinctions
+  present in the cited material
+- read like thin executive summaries even though the cited material is
+  low-noise/high-structure
+
+**Auto-fix in auto-maintenance mode only when the missing structure is
+explicit and source-grounded** — expand the page to restore omitted
+sections, lists, or distinctions without inventing new claims.
+Otherwise, report the issue for human review.
+
+### 7. Stale Information
 
 Check for wiki pages with dates significantly in the past or content
 that references time-sensitive information (e.g., "currently",
@@ -134,6 +153,9 @@ Produce a structured report:
 (list or "All raw sources covered")
 
 ### Contradictions
+(list or "None detected")
+
+### Undercompressed Syntheses
 (list or "None detected")
 
 ### Stale Information

@@ -53,6 +53,13 @@ one page already says.
 
 When filing a synthesis page:
 
+Apply the same anti-overcompression standard here. If the cited pages
+contain materially different arguments, reusable frameworks, matrices,
+checklists, or non-redundant examples, write a high-fidelity synthesis
+that preserves those distinctions. Do not collapse a rich cross-page
+answer into a thin executive summary just because it is a synthesis
+page.
+
 1. Create the page in `wiki/` with frontmatter:
    ```yaml
    ---

@@ -18,6 +18,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Changed
 - aligned skill metadata, invocation policy, and Codex UI metadata files with current OpenAI Codex and Anthropic skill-authoring guidance
 - expanded the top-level and tools-specific documentation for runtime-backed skills and cross-agent metadata expectations
+- propagated Agenpedia anti-overcompression guidance across ingest, ingest adapters, query synthesis, and lint maintenance flows
 
 ### Fixed
 - `agenpedia/ingest-youtube` now resolves repo-relative output paths from the repository root instead of the caller's working directory

@@ -17,6 +17,9 @@ configured tools, and the expected `raw/` and `wiki/` workflow.
 
 This skill is a thin adapter around the existing `ingest` skill. Do not
 duplicate the ingest logic here.
+All page-writing decisions still belong to `ingest`, including the
+Step 2b source-density check and compression mode. Do not pre-compress
+long transcripts at this adapter layer.
 
 ## Prerequisites
 
@@ -51,7 +54,11 @@ is missing.
    Do not summarize, translate, or clean the transcript unless the user
    asked for that separately.
 6. Immediately continue by invoking the `ingest` skill with the emitted
-   file path as its argument.
+   file path as its argument. The downstream ingest must still assess
+   whether the transcript is low-noise/high-structure and, if so,
+   preserve its substantive frameworks, checklists, distinctions, and
+   materially different examples rather than collapsing the talk into a
+   thin summary.
 
 ## Failure Handling
 

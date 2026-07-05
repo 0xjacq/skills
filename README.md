@@ -41,6 +41,9 @@ For the runtime-backed `tools` category, see [skills/tools/README.md](./skills/t
 ## Agenpedia Skills
 
 These skills power the [Agenpedia](https://github.com/0xjacq/Agenpedia) wiki template. They can also be used standalone in any markdown wiki project that follows the Agenpedia schema.
+The ingest family uses density-aware compression: low-noise,
+high-structure sources should become high-fidelity syntheses rather
+than thin executive summaries.
 
 | Skill | Description |
 |-------|-------------|
