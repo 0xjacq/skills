@@ -1,0 +1,7 @@
+interface:
+  display_name: "Idea Discovery"
+  short_description: "Clarify ideas before writing specs"
+  default_prompt: "Use $discover-idea to clarify a vague product, business, technical, trading, crypto, or automation idea before writing a spec."
+
+policy:
+  allow_implicit_invocation: true
